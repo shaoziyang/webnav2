@@ -196,6 +196,7 @@ var SXYH_WALLPAPER_CURRENT='';
 // img = xx/xx/xx.png | xx.jpg | RANDOM or "" | DAY | BING
 //       xx/xx/xx.png: Specify image file with directory
 //       xx.jpg: image file in current directory
+//       {{IMG_LIB}}xx.jpg: image file in image library
 //       random: random image file in homepage/config/images/ directory every view
 //       DAY: random image file in homepage/config/images/ directory per day
 //       bing: get today's bing wallpaper
@@ -239,12 +240,17 @@ function SXYH_setwallpaper(img="", opacity=80, size="cover") {
         xhr.send();
     }
     else {
-        // include "/" or "://"
-        if (v.indexOf("/") > -1){
-            imgfile = v;
+        if (v.substr(0, '{{IMG_LIB}}'.length) == '{{IMG_LIB}}') {
+            imgfile = IMAGE_PATH()+v.substr('{{IMG_LIB}}'.length);
         }
-        else{
-            imgfile = DOC_PATH() + v;
+        else{        
+            // include "/" or "://"
+            if (v.indexOf("/") > -1){
+                imgfile = v;
+            }
+            else{
+                imgfile = DOC_PATH() + v;
+            }
         }
         document.body.style.background = ofile + 'url(' + imgfile + ') no-repeat fixed center';
         document.body.style.backgroundSize = size;
