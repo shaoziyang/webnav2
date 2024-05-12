@@ -11,3 +11,4 @@ versions/
 playground/
 !datasets/documents/.gitkeep
 !datasets/trash/.gitkeep
+!index.php
