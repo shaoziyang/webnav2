@@ -1,0 +1,13 @@
+.htaccess
+robots.txt
+sitemap.xml
+draft.md
+content.md.view
+config.inc.php
+counter.txt
+statistics.txt
+datasets/trash/*
+versions/
+playground/
+!datasets/documents/.gitkeep
+!datasets/trash/.gitkeep
