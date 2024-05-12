@@ -201,6 +201,7 @@ var SXYH_WALLPAPER_CURRENT='';
 //       DAY: random image file in homepage/config/images/ directory per day
 //       bing: get today's bing wallpaper
 // opacity: 10 - 100
+// size: image size, it is CSS background-size Property  
 function SXYH_setwallpaper(img="", opacity=80, size="cover") {
 
     // replace "\" with "/" and convert to uppercase
