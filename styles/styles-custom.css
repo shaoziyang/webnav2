@@ -1,0 +1,168 @@
+
+.about-dialog {
+	display: none; /* 隐藏对话框 */
+	position: fixed; /* 使对话框固定在屏幕中 */
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 410px;
+	max-width: 95%;
+	padding: 15px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+	background-color: white;
+}
+.close-button {
+	float: right;
+	cursor: pointer;
+	color: #888;
+	font-size: 1.5rem;
+	margin-top: -20px;
+	margin-right: -12px;
+}
+.logo-image {
+	position: relative;
+	transition: transform 0.4s; /* 添加过渡效果 */
+}
+
+.SXYH_DiaryMotto {
+    text-align: center;
+    width: 100%;
+	font-size:1.5em;
+	color:#00C0FF;
+	text-shadow: 1px 1px 2px black;
+}
+
+.SXYH_divDiaryMotto {
+    text-align: center;
+    width: 100%;
+    padding: 5px;
+}
+
+.SXYH_imageLibrary {
+    background-color: transparent;
+    border-radius: 0px;
+    border: 0px solid #transparent;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: none;
+    margin: 8px;
+    width: 240px;
+    height: auto;
+    line-height: 28px;
+}
+
+.SXYH_imageLibraryFileName {
+    background-color:transparent;
+    width: 240px;
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-family: msyh, Monaco, Courier New, Consolas, Menlo, monospace;
+    font-size: 1em;
+}
+
+.nowrap{
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.code_b1 {
+    font-family: Monaco, Courier New, Consolas, Menlo, monospace;
+    font-weight: bold;
+    white-space: pre;
+    color: blue;
+}
+
+.sxyh_search_container {
+	width: 240px;
+	display: inline-block;
+	white-space: nowrap;
+	vertical-align: top;
+	margin: 10px 10px 0px 0px;
+}
+
+.sxyh_search_Title {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.sxyh_search_category {
+    font-size: 1em;
+    font-weight: bold;
+    margin: 10px 0px 0px 0px;
+}
+
+.sxyh_search_input {
+    border: 1px solid #555555;
+    border-radius: 2px;
+    height: 1.5em;
+    width: 135px;
+}
+
+.sxyh_search_button {
+    border: 1px solid #555555;
+    background-color:transparent;
+    border-radius: 3px;
+    width: 95px;
+    height: 1.5em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.sxyh_nav_container {
+    width: 72px;
+    height: 16px;
+	display: inline-block;
+	white-space: nowrap;
+    text-align: left;
+    vertical-align: top;
+    font-size:14px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.sxyh_nav_Title {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.sxyh_nav_category {
+    font-size: 14px;
+    font-weight: bold;
+    display: -webkit-box;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 40px;
+    color: #014BB5;
+}
+
+.sxyh_nav_link {
+    background-color:transparent;
+    width: 72px;
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size:14px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+}
+
+a.sxyh_nav_link {color: #039BE5;}
+a.sxyh_nav_link:hover { color: #0303E5;text-decoration:none;}
+
+.sxyh_nav_td{ /* 对于所有td和th元素 */
+  vertical-align: top; /* 垂直顶部对齐 */
+  padding: 0; /* 设置内边距为0 */
+  border: none; /* 隐藏边框 */
+}
+
+.no-border {
+  border: none;
+  vertical-align: top;
+}
