@@ -203,7 +203,7 @@ var SXYH_WALLPAPER_CURRENT='';
 //       {{IMG_LIB}}xx.jpg: image file in image library
 //       RANDOM: random image file in homepage/config/images/ directory every view
 //       DAY: random image file in homepage/config/images/ directory per day
-//       bing: get today's bing wallpaper
+//       BING: get today's bing wallpaper
 // opacity: 0 - 1
 // size: image size, it is CSS background-size Property  
 function SXYH_setwallpaper(img="", opacity=0.8, size="cover") {
@@ -328,9 +328,11 @@ function SXYH_js(filename) {
         SXYH_JS_CERRENT = filename;
     }
 }
+
+// update file count when SXYH_FLAG_UPDATE_FILECOUNT = 1, by send query
 function update_filecount(){
     if(SXYH_FLAG_UPDATE_FILECOUNT){
-        SXYH_FLAG_UPDATE_FILECOUNT = 0;
+        SXYH_FLAG_UPDATE_FILECOUNT = 0;  // clear flag
         var xhr = new XMLHttpRequest();
         xhr.open("POST", APP_PATH()+"updatefilecount.php?cmd=update", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
