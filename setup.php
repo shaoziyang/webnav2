@@ -30,7 +30,7 @@ $root_dir=substr($original_dir,0,strrpos($original_dir,($_POST['path'] ?? ''))).
 // check action
 if($g_act=="check"){
 	// reset session setup
-	$_SESSION['wikidocs']['setup']=null;
+	$_SESSION['webnav2']['setup']=null;
 	// check setup
 	if(file_exists($root_dir."setup.php")){$checks_array['path']=true;}else{$checks_array['path']=false;$errors=true;}
 	if(strlen($_POST['title'])){$checks_array['title']=true;}else{$checks_array['title']=false;$errors=true;}
@@ -39,20 +39,20 @@ if($g_act=="check"){
 	if(strlen($_POST['notice'])){$checks_array['notice']=true;}else{$checks_array['notice']=false;$errors=true;}
 	if(strlen($_POST['editcode']) && $_POST['editcode']===$_POST['editcode_repeat']){$checks_array['editcode']=true;}else{$checks_array['editcode']=false;$errors=true;}
 	// set session setup
-	if(!$errors){$_SESSION['wikidocs']['setup']=$_POST;}
+	if(!$errors){$_SESSION['webnav2']['setup']=$_POST;}
 }
 // conclude action
 if($g_act=="conclude"){
 	// build configuration file
 	$config="<?php\n";
 	$config.="define('DEBUGGABLE',false);\n";
-	$config.="define('PATH',\"".$_SESSION['wikidocs']['setup']['path']."\");\n";
-	$config.="define('TITLE',\"".$_SESSION['wikidocs']['setup']['title']."\");\n";
-	$config.="define('SUBTITLE',\"".$_SESSION['wikidocs']['setup']['subtitle']."\");\n";
-	$config.="define('OWNER',\"".$_SESSION['wikidocs']['setup']['owner']."\");\n";
-	$config.="define('NOTICE',\"".$_SESSION['wikidocs']['setup']['notice']."\");\n";
+	$config.="define('PATH',\"".$_SESSION['webnav2']['setup']['path']."\");\n";
+	$config.="define('TITLE',\"".$_SESSION['webnav2']['setup']['title']."\");\n";
+	$config.="define('SUBTITLE',\"".$_SESSION['webnav2']['setup']['subtitle']."\");\n";
+	$config.="define('OWNER',\"".$_SESSION['webnav2']['setup']['owner']."\");\n";
+	$config.="define('NOTICE',\"".$_SESSION['webnav2']['setup']['notice']."\");\n";
 	$config.="define('PRIVACY',null);\n";
-	$config.="define('EDITCODE',\"".str_replace("$","\\$",password_hash($_SESSION['wikidocs']['setup']['editcode'],PASSWORD_DEFAULT))."\");\n";
+	$config.="define('EDITCODE',\"".str_replace("$","\\$",password_hash($_SESSION['webnav2']['setup']['editcode'],PASSWORD_DEFAULT))."\");\n";
 	$config.="define('VIEWCODE',null);\n";
 	$config.="define('COLOR',\"#4CAF50\");\n";
 	$config.="define('DARK',false);\n";
@@ -62,7 +62,7 @@ if($g_act=="conclude"){
 	// build htacess file
 	$htaccess="<IfModule mod_rewrite.c>\n";
 	$htaccess.="\tRewriteEngine On\n";
-	$htaccess.="\tRewriteBase ".$_SESSION['wikidocs']['setup']['path']."\n";
+	$htaccess.="\tRewriteBase ".$_SESSION['webnav2']['setup']['path']."\n";
 	$htaccess.="\tRewriteCond %{REQUEST_FILENAME} !-f\n";
 	$htaccess.="\tRewriteRule ^(.*)$ index.php?doc=$1 [NC,L,QSA]\n";
 	$htaccess.="</IfModule>\n";
@@ -174,7 +174,7 @@ if($g_act=="conclude"){
 			<h2>Saving configuration</h2>
 			<?php if($configured){ ?>
 				<p>Your configuration has been saved..</p>
-				<p><a href="<?= $_SESSION['wikidocs']['setup']['path'] ?>">Continue</a> to your wiki!</p>
+				<p><a href="<?= $_SESSION['webnav2']['setup']['path'] ?>">Continue</a> to your wiki!</p>
 				<i class="material-icons small green-text">check_circle</i>
 			<?php }else{ ?>
 				<p class="red-text">An error occurred while saving the configuration!</p>

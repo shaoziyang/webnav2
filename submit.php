@@ -42,24 +42,24 @@ function authentication(){
 	// debug
 	wdf_dump($_REQUEST,"_REQUEST");
 	// reset authentication
-	$_SESSION['wikidocs']['authenticated']=0;
+	$_SESSION['webnav2']['authenticated']=0;
 	// acquire variables
 	$p_document=strtolower($_POST['document']);
 	$p_password=$_POST['password'];
 	// check edit code
   if(strlen(EDITCODE)==32 && strtolower(md5($p_password))===strtolower(EDITCODE)) {
-    $_SESSION['wikidocs']['authenticated']=2;
+    $_SESSION['webnav2']['authenticated']=2;
   }elseif(password_verify($p_password,EDITCODE)) {
-    $_SESSION['wikidocs']['authenticated']=2;
+    $_SESSION['webnav2']['authenticated']=2;
   }elseif(strlen(VIEWCODE)==32 && strtolower(md5($p_password))===strtolower(VIEWCODE)) {
-    $_SESSION['wikidocs']['authenticated']=1;
+    $_SESSION['webnav2']['authenticated']=1;
   }elseif(password_verify($p_password, VIEWCODE)){
-    $_SESSION['wikidocs']['authenticated']=1;
+    $_SESSION['webnav2']['authenticated']=1;
   }else{
-    $_SESSION['wikidocs']['authenticated']=0;
+    $_SESSION['webnav2']['authenticated']=0;
   }
   // check for authentication
-  if($_SESSION['wikidocs']['authenticated']) {
+  if($_SESSION['webnav2']['authenticated']) {
     wdf_alert($TXT->SubmitAuthSuccess,"success");
     wdf_redirect(PATH.$p_document);
   }else{

@@ -25,11 +25,11 @@ final class Session{
 		// start php session
 		session_start();
 		// check for application session array
-		if(!isset($_SESSION['wikidocs']) || !is_array($_SESSION['wikidocs'])){$_SESSION['wikidocs']=array();}
+		if(!isset($_SESSION['webnav2']) || !is_array($_SESSION['webnav2'])){$_SESSION['webnav2']=array();}
 		// check for application debug
-		if(!isset($_SESSION['wikidocs']['debug'])){$this->setDebug(false);}
+		if(!isset($_SESSION['webnav2']['debug'])){$this->setDebug(false);}
 		// check for application session alerts array
-		if(!isset($_SESSION['wikidocs']['alerts']) || !is_array($_SESSION['wikidocs']['alerts'])){$_SESSION['wikidocs']['alerts']=array();}
+		if(!isset($_SESSION['webnav2']['alerts']) || !is_array($_SESSION['webnav2']['alerts'])){$_SESSION['webnav2']['alerts']=array();}
 	}
 
 	public function destroy(){
@@ -42,7 +42,7 @@ final class Session{
 	}
 
 	public function autenticationLevel():int{
-		return intval($_SESSION['wikidocs']['authenticated'] ?? '');
+		return intval($_SESSION['webnav2']['authenticated'] ?? '');
 	}
 
 	public function isAuthenticated():bool{
@@ -50,11 +50,11 @@ final class Session{
 	}
 
 	public function setDebug(bool $value){
-		$_SESSION['wikidocs']['debug']=$value;
+		$_SESSION['webnav2']['debug']=$value;
 	}
 
 	public function isDebug():bool{
-		return boolval($_SESSION['wikidocs']['debug']);
+		return boolval($_SESSION['webnav2']['debug']);
 	}
 
 	public function privacyAgreement(bool $value){
