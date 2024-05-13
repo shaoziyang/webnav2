@@ -38,7 +38,7 @@
       gtag('config','<?= GTAG ?>');
 		</script>
 	<?php endif; ?>
-	<?php include "nav.php"; include "pageview.php"; include "filecount.php"; include "counter.php"; include "recent.php"; ?>
+	<?php include "common.php"; include "nav.php"; include "pageview.php"; include "filecount.php"; include "counter.php"; include "recent.php"; ?>
 	<script src="<?= $APP->PATH ?>scripts/common.js"></script>
 </head>
 <body>

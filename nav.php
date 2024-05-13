@@ -59,7 +59,6 @@ if(file_exists($file_dm)){
     }
 
     if(count($ar) > 0) {
-        include "common.php";
         $dm = $ar[randint_day() % count($ar)];
     }
 }
