@@ -259,7 +259,7 @@ function SXYH_setwallpaper(img="", opacity=0.8, size="cover") {
         }
         document.body.style.background = ofile + 'url(' + imgfile + ') no-repeat fixed center';
         document.body.style.backgroundSize = size;
-        SXYH_WALLPAPER_CURRENT = v;
+        SXYH_WALLPAPER_CURRENT = imgfile;
     }
 }
 
