@@ -197,13 +197,14 @@ function decodeHtmlEntities(encodedString) {
 // last wallpaper filename
 var SXYH_WALLPAPER_CURRENT='';
 // set current page's walpaper
-// img = xx/xx/xx.png | xx.jpg | RANDOM or "" | DAY | BING
+// img = xx/xx/xx.png | xx.jpg | RANDOM or "" | DAY | BING | BING_AUTOSAVE
 //       xx/xx/xx.png or https://xxx.jpg: Specify image file with directory or url
 //       xx.jpg: image file in current directory
 //       {{IMG_LIB}}xx.jpg: image file in image library
 //       RANDOM: random image file in homepage/config/images/ directory every view
 //       DAY: random image file in homepage/config/images/ directory per day
 //       BING: get today's bing wallpaper
+//       BING_AUTOSAVE: get today's bing wallpaper and save to image library
 // opacity: 0 - 1
 // size: image size, it is CSS background-size Property  
 function SXYH_setwallpaper(img="", opacity=0.8, size="cover") {
@@ -228,7 +229,7 @@ function SXYH_setwallpaper(img="", opacity=0.8, size="cover") {
 
     imgfile = "";
     if(v == "") v = "RANDOM";
-    if((v == "RANDOM")||(v == "DAY")||(v == "BING")) {
+    if((v == "RANDOM")||(v == "DAY")||(v == "BING")||(v == "BING_AUTOSAVE")) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", APP_PATH()+"custom.php?cmd=IMAGE_OF_"+v, true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
