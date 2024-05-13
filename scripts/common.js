@@ -328,3 +328,14 @@ function SXYH_js(filename) {
         SXYH_JS_CERRENT = filename;
     }
 }
+function update_filecount(){
+    if(SXYH_FLAG_UPDATE_FILECOUNT){
+        SXYH_FLAG_UPDATE_FILECOUNT = 0;
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", APP_PATH()+"updatefilecount.php?cmd=update", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.send();
+    }
+}
+
+update_filecount();
