@@ -13,7 +13,7 @@ define('LANG',"en");
 // Application title
 define('PATH',"/");
 // Application title
-define('TITLE',"Wiki|Docs");
+define('TITLE',"⛵webnav");
 // Application subtitle
 define('SUBTITLE',"flat-file markdown wiki engine");
 // Contents owner
