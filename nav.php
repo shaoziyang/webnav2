@@ -44,7 +44,7 @@ function AnalyseConfig($file, &$arr) {
 AnalyseConfig($file_search, $arr_sd);
 AnalyseConfig($file_nav, $arr_nd);
 
-$dm = '';
+$dm = $dmh = '';
 if(file_exists($file_dm)){
     $ss = file($file_dm);
     $ar = array();
@@ -61,11 +61,12 @@ if(file_exists($file_dm)){
     }
 
     if(count($ar) > 0) {
-        $dm = $ar[randint_day() % count($ar)];
+        $tdm = explode(',', str_replace('，', ',', $ar[randint_day() % count($ar)]));
+        list($dm, $dmh) = $tdm;
     }
 }
 
 
-echo "<script>  SXYH_ArraySearch = ".$arr_sd."\n  SXYH_ArrayNav = ".$arr_nd."\n SXYH_dm = '".$dm."';\n </script>";
+echo "<script>  SXYH_ArraySearch = ".$arr_sd.";\n  SXYH_ArrayNav = ".$arr_nd.";\n SXYH_dm = '".addslashes($dm)."';\n  SXYH_dmh ='".addslashes($dmh)."';\n </script>";
 
 ?>

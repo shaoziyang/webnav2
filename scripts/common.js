@@ -185,7 +185,7 @@ function SXYH_ShowDailyMotto(){
     if (SXYH_dm == '')
         SXYH_dm = 'Nothing is impossible';
 
-    document.write('<div class="SXYH_divDiaryMotto"><span class="SXYH_DiaryMotto">'+SXYH_dm+'</span></div>');
+    document.write('<div class="SXYH_divDiaryMotto"><span class="SXYH_DiaryMotto" TITLE="'+SXYH_dmh+'">'+SXYH_dm+'</span></div>');
 }
 
 function decodeHtmlEntities(encodedString) {
