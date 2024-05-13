@@ -55,7 +55,9 @@ if(file_exists($file_dm)){
         // first char must be '-' or '*'
         if (($a[0] <> '-')&&(($a[0] <> '*'))) continue;
         // add a line
-        array_push($ar, trim(substr($a, 1)));
+        $t = trim(substr($a, 1));
+        if ($t != '')
+            array_push($ar, $t);
     }
 
     if(count($ar) > 0) {
