@@ -200,14 +200,14 @@ var SXYH_WALLPAPER_CURRENT='';
 //       random: random image file in homepage/config/images/ directory every view
 //       DAY: random image file in homepage/config/images/ directory per day
 //       bing: get today's bing wallpaper
-// opacity: 10 - 100
+// opacity: 0 - 1
 // size: image size, it is CSS background-size Property  
-function SXYH_setwallpaper(img="", opacity=80, size="cover") {
+function SXYH_setwallpaper(img="", opacity=0.8, size="cover") {
 
     // replace "\" with "/" and convert to uppercase
     let v = decodeHtmlEntities(img).replace(/\\/g, "/");
 
-    switch (Math.floor(opacity/10)) {
+    switch (Math.floor(opacity*10)) {
         case 9:ofile = 'opacity_90.png';break;
         case 8:ofile = 'opacity_80.png';break;
         case 7:ofile = 'opacity_70.png';break;
