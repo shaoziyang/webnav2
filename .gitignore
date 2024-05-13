@@ -6,6 +6,7 @@ content.md.view
 config.inc.php
 counter.txt
 statistics.txt
+recent/
 datasets/trash/*
 versions/
 playground/
