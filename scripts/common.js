@@ -1,3 +1,4 @@
+// insert "insertStr" to "str"
 function insertStr (str, index, insertStr) {
     return str.substring(0, index) + insertStr + str.substring(index);
 }
@@ -7,6 +8,7 @@ function padLeft(num, length) {
     return (Array(length).join('0') + num).slice(-length);
 }
 
+// get host name
 function HostName(){
     let url=window.location.href;
     let position = -1;
@@ -192,12 +194,14 @@ function decodeHtmlEntities(encodedString) {
     return textArea.value;
 }
 
+// last wallpaper filename
 var SXYH_WALLPAPER_CURRENT='';
+// set current page's walpaper
 // img = xx/xx/xx.png | xx.jpg | RANDOM or "" | DAY | BING
-//       xx/xx/xx.png: Specify image file with directory
+//       xx/xx/xx.png or https://xxx.jpg: Specify image file with directory or url
 //       xx.jpg: image file in current directory
 //       {{IMG_LIB}}xx.jpg: image file in image library
-//       random: random image file in homepage/config/images/ directory every view
+//       RANDOM: random image file in homepage/config/images/ directory every view
 //       DAY: random image file in homepage/config/images/ directory per day
 //       bing: get today's bing wallpaper
 // opacity: 0 - 1
@@ -259,6 +263,7 @@ function SXYH_setwallpaper(img="", opacity=0.8, size="cover") {
     }
 }
 
+// show all image library
 function SXYH_ShowImageLibrary(Title='', showfilename=true) {
 
     document.write('<div');
@@ -290,6 +295,12 @@ function SXYH_ShowImageLibrary(Title='', showfilename=true) {
     xhr.send();
 }
 
+// use javascript
+// filename = https://xx.js | xx.js | RANDOM | DAY
+//            https://xx.js: Specify js file with url
+//            xx.js: "js file in homepage/config/javascript/" directory
+//            RANDOM: random js file in "homepage/config/javascript/" directory every view
+//            DAY: random image file in "homepage/config/javascript/" directory per day
 var SXYH_JS_CERRENT='';
 function SXYH_js(filename) {
 
