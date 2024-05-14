@@ -302,7 +302,7 @@ function SXYH_ShowImageLibrary(Title='', showfilename=true) {
 //            xx.js: "js file in homepage/config/javascript/" directory
 //            RANDOM: random js file in "homepage/config/javascript/" directory every view
 //            DAY: random image file in "homepage/config/javascript/" directory per day
-var SXYH_JS_CERRENT='';
+var SXYH_JS_CURRENT='';
 function SXYH_js(filename) {
 
     // replace "\" with "/" and convert to uppercase
@@ -317,7 +317,7 @@ function SXYH_js(filename) {
                 var script = document.createElement('script');
                 script.src = JS_PATH()+xhr.responseText;
                 document.body.appendChild(script);
-                SXYH_JS_CERRENT = xhr.responseText;
+                SXYH_JS_CURRENT = xhr.responseText;
             }
         };
         xhr.send();
@@ -326,7 +326,7 @@ function SXYH_js(filename) {
         if(filename.indexOf('://')==-1)
             filename = JS_PATH()+filename;
         document.write('<script src="'+filename+'"></script>');
-        SXYH_JS_CERRENT = filename;
+        SXYH_JS_CURRENT = filename;
     }
 }
 
