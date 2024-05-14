@@ -181,11 +181,14 @@ function SXYH_ShowNav(Title=''){
 }
 
 // show Daily Motto
-function SXYH_ShowDailyMotto(){
+function SXYH_ShowDailyMotto(style=""){
     if (SXYH_dm == '')
         SXYH_dm = 'Nothing is impossible';
+    
+    if (SXYH_dm_style != '')
+        style = SXYH_dm_style;
 
-    document.write('<div class="SXYH_divDiaryMotto"><span class="SXYH_DiaryMotto" TITLE="'+SXYH_dmh+'">'+SXYH_dm+'</span></div>');
+    document.write('<div class="SXYH_divDiaryMotto"><span class="SXYH_DiaryMotto" style="'+style+'" TITLE="'+SXYH_dm_hint+'">'+SXYH_dm+'</span></div>');
 }
 
 function decodeHtmlEntities(encodedString) {

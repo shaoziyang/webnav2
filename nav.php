@@ -29,7 +29,7 @@ function AnalyseConfig($file, &$arr) {
             // first char must be '-' or '*'
             if (($a[0] <> '-')&&(($a[0] <> '*'))) continue;
             // replace '，' to ',' then explode to sub-array $tmp
-            $tmp = explode(',', substr(str_replace('，', ',', $a), 1));
+            $tmp = explode('|', substr($a, 1));
             $arr = $arr.'[';
             for($n=0; $n<count($tmp); $n++){
                 $arr = $arr.'"'.trim($tmp[$n]).'",';
@@ -44,7 +44,7 @@ function AnalyseConfig($file, &$arr) {
 AnalyseConfig($file_search, $arr_sd);
 AnalyseConfig($file_nav, $arr_nd);
 
-$dm = $dmh = '';
+$dm = $dmh = $dms = '';
 if(file_exists($file_dm)){
     $ss = file($file_dm);
     $ar = array();
@@ -61,12 +61,12 @@ if(file_exists($file_dm)){
     }
 
     if(count($ar) > 0) {
-        $tdm = explode(',', str_replace('，', ',', $ar[randint_day() % count($ar)]));
-        list($dm, $dmh) = $tdm;
+        $tdm = explode('|', $ar[randint_day() % count($ar)]);
+        list($dm, $dmh, $dms) = $tdm;
     }
 }
 
 
-echo "<script>  SXYH_ArraySearch = ".$arr_sd.";\n  SXYH_ArrayNav = ".$arr_nd.";\n SXYH_dm = '".addslashes($dm)."';\n  SXYH_dmh ='".addslashes($dmh)."';\n </script>";
+echo "<script>  SXYH_ArraySearch = ".$arr_sd.";\n  SXYH_ArrayNav = ".$arr_nd.";\n  SXYH_dm = '".addslashes(trim($dm))."';\n  SXYH_dm_hint ='".addslashes(trim($dmh))."';\n  SXYH_dm_style = '".trim($dms)."';\n</script>";
 
 ?>
