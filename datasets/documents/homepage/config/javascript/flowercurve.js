@@ -43,6 +43,7 @@ let _MAXDOT = 20000;
 let _mode = '';
 let points = []; // 保存绘制的点
 let ang = 0;
+let animationId = false;
 
 function randrange(min, max) {
     return Math.random()*(max-min)+min;
@@ -116,10 +117,10 @@ function reset() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctxC.strokeStyle = _color;
     ctxC.lineWidth = 1;
-    console.log('Mode: '+_mode);
-    console.log('R, r, d: '+_R+' '+_r+' '+_d);
-    console.log('dt, MAX: '+_dt+' '+_MAXDOT);
-    console.log('color, width: '+_color+' '+_width);
+    //console.log('Mode: '+_mode);
+    //console.log('R, r, d: '+_R+' '+_r+' '+_d);
+    //console.log('dt, MAX: '+_dt+' '+_MAXDOT);
+    //console.log('color, width: '+_color+' '+_width);
 }
 
 function resizeCanvas() {
@@ -138,10 +139,13 @@ function flowerCurve(mode="RANDOM", R=500, r=310, d=65, dt=0.001, color='rgba(20
 
     flowerCurve_initParam(R, r, d, dt, color, width, maxdot);
 
-    console.log('Draw flower curve.');
+    //console.log('Draw flower curve.');
 
     reset();
-    requestAnimationFrame(draw);
+    if(!animationId) {
+        animationId = true;
+        requestAnimationFrame(draw);
+    }
 }
 
 flowerCurve();
