@@ -39,6 +39,7 @@ let _MAXDOT = 3000;
 let _color1 = 'red';
 let _color2 = 'blue';
 let _mode = '';
+let animationId = false;
 
 function randrange(min, max) {
     return Math.random()*(max-min)+min;
@@ -140,8 +141,10 @@ function lorenz(mode="RANDOM", sigma=10.0, rho=28.0, beta=8/3.0, dt=0.01, MAXDOT
     console.log('Draw Lorenz curve.');
 
     reset();
-    requestAnimationFrame(drawLorenz);
-    //setInterval(drawLorenz, _pointInterval);
+    if(!animationId) {
+        animationId = true;
+        requestAnimationFrame(drawLorenz);
+    }
 }
 
 lorenz();
