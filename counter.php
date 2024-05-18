@@ -95,7 +95,7 @@ if (file_exists($counter_filename)) {
     $day = $week = $month = $year = $all = 1;
 }
 
-$wikistat = '<b>📊'.$TXT->Statistics.'</b> '.$TXT->Today.' <b><font color="#0080FF">'.$day.'</font></b> &nbsp'.$TXT->Yesterday.' <b><font color="#A04020">'.$yesterday.'</font></b> &nbsp'.$TXT->Week.' <b><font color="#12CC22">'.$week.'</font></b> &nbsp'.$TXT->Month.' <b><font color="#CF8C52">'.$month.'</font></b> &nbsp'.$TXT->Year.' <b><font color="#801010">'.$year.'</font></b> &nbsp'.$TXT->All.' <b><font color="#002288">'.$all.'</font></b>';
+$wikistat = '📊 '.$TXT->Today.' <b><font color="#0080FF">'.$day.'</font></b> &nbsp'.$TXT->Yesterday.' <b><font color="#A04020">'.$yesterday.'</font></b> &nbsp'.$TXT->Week.' <b><font color="#12CC22">'.$week.'</font></b> &nbsp'.$TXT->Month.' <b><font color="#CF8C52">'.$month.'</font></b> &nbsp'.$TXT->Year.' <b><font color="#801010">'.$year.'</font></b> &nbsp'.$TXT->All.' <b><font color="#002288">'.$all.'</font></b>';
 
 if (!$add)
     return;
