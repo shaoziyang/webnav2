@@ -92,7 +92,7 @@ function drawFractalTree() {
 
     d = points.shift();
 
-    ctx.globalAlpha = d[4]/(_depth+1);
+    ctx.globalAlpha = (d[4]+1)/(_depth+2);
 
     ctx.beginPath();
     ctx.moveTo(d[0], d[1]);
