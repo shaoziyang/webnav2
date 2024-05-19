@@ -1,0 +1,156 @@
+# 导航
+
+## 使用方法
+
+1. 有效数据以减号或星号开头（前面可以有空格）。
+2. 一行中数据之间以“|”分隔，如果只有一个有效数据或第二个数据不是网址，它代表是导航分类；否则代表是网址。
+3. 数据定义格式为： `名称, 网址 [, 提示 [, 网址栏样式]]`。
+4. 样式定义为 css，它具有最高优先级，请参考 css 相关说明。
+5. 在需要的地方，使用 <span style="color:blue"><script</span><span style="color:blue">>SXYH_ShowNav();</</span><span style="color:blue">script></span> 显示网址导航。
+
+
+- 新闻||网站|color:blue
+	- 环球网| https://www.huanqiu.com/
+	- 观察者网| https://www.guancha.cn/
+	- 联合早报| http://www.quzaobao.com/
+	- 央视新闻| https://news.cctv.com/china/
+	- 澎湃新闻| https://www.thepaper.cn/
+	- 百度新闻| https://news.baidu.com/
+	- 界面新闻| https://www.jiemian.com/
+	- 钛媒体| https://www.tmtpost.com/
+	- TechWeb| https://www.techweb.com.cn/
+	- IT之家| https://www.ithome.com/
+	- 滚动新闻| https://www.chinanews.com/scroll-news/news1.html
+	- 环球视野| https://tophub.today/n/yjvQy54vbg
+	- 搜狐| https://www.sohu.com/
+	- 腾讯|https://www.qq.com/
+	- 网易|https://fwww.163.com/
+	- 今日头条|https://www.toutiao.com/
+- 体育
+	- 虎扑体育| https://www.hupu.com/
+	- 直播8| https://www.zhibo8.cc/
+	- 英超联赛| https://sports.qq.com/premierleague/
+	- 新浪体育| https://sports.sina.com.cn/
+	- 搜狐体育| https://sports.sohu.com/
+	- 腾讯体育| https://sports.qq.com/
+	- CCTV| http://sports.cntv.cn/
+	- 凤凰体育| https://sports.ifeng.com/
+	- NBA新闻| https://sports.qq.com/nba/index.shtml
+	- ESPN| https://www.espn.com/
+- 🎬|color:#C00080
+	- 爱奇艺| https://www.iqiyi.com/
+	- 哔哩哔哩| https://www.bilibili.com/
+	- 抖音|https://www.douyin.com
+	- 腾讯视频| https://v.qq.com/
+	- 优酷网| https://www.youku.com/ 
+	- 咪咕视频| https://www.miguvideo.com/
+	- 央视网| https://tv.cctv.com/
+- 🎵|1|2|color:#8030C0
+	- 网易云音乐| https://music.163.com/
+	- QQ音乐| https://y.qq.com/
+	- 酷我| https://kuwo.cn/
+	- 酷狗音乐| https://www.kugou.com/
+	- Last.fm| https://www.last.fm/zh/
+	- 柠檬树| http://ainm.cc/c/music/
+	- 千千音乐| https://music.91q.com/
+	-  spotify| https://www.spotify.com/ 
+- 📧|||color:green;
+	- 126| https://126.com/|| color:green;font-weight:bold;
+	- 163| https://mail.163.com/|| color:#DD081C;font-weight:bold;
+	- outlook| https://outlook.live.com/
+	-  GMail| https://mail.google.com/
+	- 阿里企业邮| https://qiye.aliyun.com/
+	- QQ邮箱| https://exmail.qq.com/login
+	- 搜狐邮箱| https://mail.sohu.com/
+	- 139邮箱| https://mail.10086.cn/
+	- 188邮箱| https://www.188.com/
+	- 189邮箱| https://webmail30.189.cn/
+	- 沃邮箱| https://mail.wo.cn/
+- 网盘|color:#2040C0;
+	- 百度网盘| https://pan.baidu.com/
+	- 阿里云盘| https://www.aliyundrive.com/|| color:#5174FD;font-weight:bold;
+	- 坚果云| https://www.jianguoyun.com/| | color: #EBC066;font-weight:bold;
+	- 腾讯微云| https://www.weiyun.com/
+	- 迅雷云盘| https://pan.xunlei.com/
+	- 123云盘| https://www.123pan.com/
+	- 天翼云盘| https://cloud.189.cn/
+	- 移动云盘| https://yun.139.com/
+	- 联通云盘| https://pan.wo.cn/
+	- TeraCloud| https://teracloud.jp/en/||color:#E08200;
+	- OpenDrive| https://www.opendrive.com/
+	- mydrive| https://www.mydrive.ch/||font-weight:bold;color:red;
+- 文档
+	- 腾讯文档| https://docs.qq.com/
+	- 金山文档| https://www.kdocs.cn/
+	- 石墨文档| https://shimo.im/|| color:black
+	- 飞书| https://docs.feishu.cn/
+	- 永中文档| https://www.yozocloud.cn/
+	- 有道| https://note.youdao.com/
+	- 钉钉文档| https://docs.dingtalk.com/
+	- GoogleDoc| https://docs.google.com/
+	- Notion| https://www.notion.so/ 
+- 百科
+	- 百度百科| https://baike.baidu.com/
+	- 360百科| https://baike.so.com/
+	- 识典百科| https://shidian.baike.com/
+	- 维基中文| https://zh.wikipedia.org/zh-cn/ 
+	- 知乎| https://www.zhihu.com/
+	- 国家百科| https://www.countryreports.org/countries/World.htm
+	- 生命百科| https://eol.org/
+	- 小鸡词典| https://jikipedia.com/
+	- wikiHow| https://zh.wikihow.com/
+- 软件
+	- PortableApp| http://portableapps.com/
+	- 华军软件园| https://www.onlinedown.net/
+	- 腾讯软件| https://pc.qq.com/
+	- 360软件库| https://baoku.360.cn/
+	- 果核剥壳| https://www.ghxi.com/
+	- 小众软件| https://www.appinn.com/
+	- Portapps | https://portapps.io/
+	- Freeware| http://www.portablefreeware.com/
+	- CNET| https://download.cnet.com/
+	- FileHippo| https://filehippo.com/
+	- TechSpot| https://www.techspot.com/downloads/
+	- Softpedia| https://www.softpedia.com/
+	- AppImage| https://appimage.github.io/apps/
+- 购物
+	- 购物党| https://gwdang.com/
+	- 什么值得买| https://www.smzdm.com/
+	- 慢慢买| http://manmanbuy.com/
+	- 京东| https://www.jd.com/
+	- 淘宝| https://www.taobao.com/
+	- 当当网| http://www.dangdang.com/
+	- 亚马逊中国| https://www.amazon.cn/
+	- 亚马逊海外| https://www.amazon.com/
+	- 全球速卖通| https://www.aliexpress.com/
+	- 唯品会| https://www.vip.com/
+	- 网易严选| https://you.163.com/
+- 编程
+	- stack| https://stackoverflow.com/
+	- 菜鸟教程| https://www.runoob.com/
+	- W3Cschool| https://www.w3cschool.cn/
+	- Anycodes| https://anycodes.cn/
+	- 力扣| https://leetcode.cn/
+	- 稀土掘金| https://juejin.cn/
+	- CSDN| https://www.csdn.net/ 
+- 综合|||color:black;
+	- 12306| https://www.12306.cn/
+	- 文心一言| https://yiyan.baidu.com/
+	- 通义千问| https://qianwen.aliyun.com/
+	- 讯飞星火| https://xinghuo.xfyun.cn/
+	- Kimi| https://kimi.moonshot.cn/
+	- 商量| https://techday.sensetime.com/
+	- 天工AI助手| https://tiangong.kunlun.com/
+	- 思研Chat| https://chat.ttext.cn/
+	- 360AI| https://www.sou.com
+	- AIGC导航|https://www.aigc.cn/
+	- 百度翻译| https://fanyi.baidu.com/
+	- 马蜂窝| https://www.mafengwo.cn/
+	- 去哪儿| https://travel.qunar.com/
+	- 同程旅行| https://www.ly.com/
+	- 携程| https://you.ctrip.com/
+	- 网易公开课| https://open.163.com/
+	- 豆瓣|https://www.douban.com/
+
+
+<script>SXYH_ShowNav();</script>
