@@ -126,10 +126,6 @@ function reset() {
     ctx.strokeStyle = _color1;
     ctxP.strokeStyle = _color2;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    console.log('Mode: '+_mode);
-    console.log('sigma, rho, beta: '+_sigma+' '+_rho+' '+_beta);
-    console.log('dt, MAX, scale: '+_dt+' '+_MAXDOT+' '+_scale);
-    console.log('color1, color2: '+_color1+' '+_color2);
 }
 
 function lorenz(mode="RANDOM", sigma=10.0, rho=28.0, beta=8/3.0, dt=0.01, MAXDOT=3000, scale=20, color1='rgba(20,40,200,0.3)', color2='rgba(50,180,200,0.8)') {
@@ -137,8 +133,6 @@ function lorenz(mode="RANDOM", sigma=10.0, rho=28.0, beta=8/3.0, dt=0.01, MAXDOT
     _mode = mode;
 
     lorenz_initParam(sigma, rho, beta, dt, MAXDOT, scale, color1, color2);
-
-    console.log('Draw Lorenz curve.');
 
     reset();
     if(!animationId) {
