@@ -12,7 +12,9 @@ function randint_day(){
     $D1 = new DateTime('1900-01-01');
     $D2 = new DateTime();
     $n = $D1->diff($D2)->days;
-    return round(fmod((fmod($n*142857, 314.159265)*271.828+142857)*577.216, 1414213.5624));
+    for($i=0;$i<5;$i++)
+        $n = (142857*$n+31)%65536;
+    return $n;
 }
 
 function getImagelist($path) {
