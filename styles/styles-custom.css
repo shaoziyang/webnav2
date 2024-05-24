@@ -79,6 +79,7 @@
 
 .sxyh_search_container {
 	width: 250px;
+	height: 1.5em;
 	display: inline-block;
 	white-space: nowrap;
 	vertical-align: top;
@@ -101,6 +102,8 @@
     border-radius: 2px;
     height: 1.5em;
     width: 135px;
+    margin: 1px;
+    background: transparent;
 }
 
 .sxyh_search_button {
@@ -111,6 +114,7 @@
     height: 1.5em;
     text-overflow: ellipsis;
     overflow: hidden;
+    margin: 1px;
 }
 
 .sxyh_nav_container {
