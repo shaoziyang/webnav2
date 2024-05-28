@@ -25,30 +25,4 @@ function getImagelist($path) {
     return $image_list;
 }
 
-function sendPostRequestFileGetContents($url, $data){
-
-    $options = [
-        'http' => [
-            'timeout' => 0,
-            'method'  => 'POST',
-            'header'  => 'Content-type: application/x-www-form-urlencoded',
-            'content' => http_build_query($data)
-        ]
-    ];
-    $context  = stream_context_create($options);
-    $result = file_get_contents($url, false, $context);
-
-    return $result;
-}
-
-function HTTPS() {
-    if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1)) {
-        return 'https://';
-    } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
-        return 'https://';
-    } else {
-        return 'http://';
-    }
-}
-
 ?>
