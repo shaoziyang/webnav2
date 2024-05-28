@@ -287,7 +287,7 @@ function SXYH_ShowImageLibrary(Title='', showfilename=true) {
             let img = '';
             for ( i=0; i < imglist.length; i++) {
                 tip = 'Title="'+(i+1)+'/'+imglist.length+' '+imglist[i]+'"';
-                img = img + '<a class="SXYH_imageLibrary" href="'+IMAGE_PATH()+imglist[i]+'" '+tip+'><img width="240" border="8" style="border-color:#E5A032;border-style:ridge;" src="'+IMAGE_PATH()+imglist[i]+'" '+tip+'>';
+                img = img + '<a class="SXYH_imageLibrary" target="_blank" href="'+IMAGE_PATH()+imglist[i]+'" '+tip+'><img width="240" border="8" style="border-color:#E5A032;border-style:ridge;" src="'+IMAGE_PATH()+imglist[i]+'" '+tip+'>';
                 if(showfilename)
                     img = img + '<span class="SXYH_imageLibraryFileName"><b>'+(i+1)+'</b> - [ '+imglist[i]+' ]</span>';
 
