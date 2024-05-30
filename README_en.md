@@ -4,6 +4,8 @@
 
 **webnav2** is a website navigation and data collection system based on Wikidocs. It is compact, fast, easy to use, easy to maintain, and easy to customize. It can be installed on virtual hosts, regular computers, set-top boxes, Raspberry Pi, Android phones, and supports Linux, Windows, Android, and other systems. It can even be used as a Windows portable software, stored on USB drives or mobile hard drives.
 
+![](001.jpg)
+
 ## 1. System functions 
 
 In addition to the original functions of Wikidocs (such as creating, editing, historical versions, searching, etc.), some practical features have been added: 
