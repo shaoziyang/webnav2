@@ -335,7 +335,7 @@
 			<span class="close-button" onclick="hideAboutDialog()">&times;</span>
 			<p><img src="<?= $APP->PATH ?>favicon.ico" align="left" class="logo-image"> <span style="font-size:30px;"><b><?= $TXT->FreeNavigation ?></b></span> &emsp;v2.0.0<br><?= $TXT->RunOn?> <a href="<?= $APP->PATH ?>"><?php echo $_SERVER['HTTP_HOST']; ?></a></p>
 			<p><?= $TXT->FreeNavigationDescription ?><br></p>
-			<p><span style="font-size:24px;">🌐</span>&emsp;🐎 <a href="https://gitee.com/shaoziyang/webnav2" target="_blank" style="background-color:red;color:white;font-weight:bold;">&nbsp;gitee&nbsp;</a>&emsp;🐈︎ <a href="https://github.com/shaoziyang/webnav2" style="background-color:black;color:white;font-weight:bold;">&nbsp;github&nbsp;</a> </p>
+			<p><span style="font-size:24px;">🌐</span>&emsp;🐎 <a href="https://gitee.com/shaoziyang/webnav2" target="_blank" target="_blank" style="background-color:red;color:white;font-weight:bold;">&nbsp;gitee&nbsp;</a>&emsp;🐈︎ <a href="https://github.com/shaoziyang/webnav2" style="background-color:black;color:white;font-weight:bold;">&nbsp;github&nbsp;</a> </p>
 		</div><!-- about-dialog -->
 		<script>
 		let isanimation = false;
