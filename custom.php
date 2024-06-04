@@ -72,6 +72,14 @@ switch($cmd) {
         return;
     case "IMAGE_OF_BING":
     case "IMAGE_OF_BING_AUTOSAVE":
+        if(file_exists($CFG_PATH.'images/BING_OF_DAY.txt')){
+            $d = file_get_contents($CFG_PATH.'images/BING_OF_DAY.txt');
+            $t = explode("|", $d);
+            if(($t[0]==intdiv(time(),24*3600))&&(file_exists($t[1]))) {
+                echo basename($t[1]);
+                return;
+            }
+        }
         for($i=0; $i<3; $i++) {
             $url = get_bing_today_imageurl();
             if($url != "") break;
@@ -88,12 +96,12 @@ switch($cmd) {
                 if ($cmd == "IMAGE_OF_BING_AUTOSAVE") {
                     // get image and save to file
                     $image_data = file_get_contents($url);
-                    file_put_contents($imgfile, $image_data);
+                    file_put_contents($imgfile, $image_data, LOCK_EX);
+                    $v = intdiv(time(),24*3600);
+                    file_put_contents($CFG_PATH.'images/BING_OF_DAY.txt', $v.'|'.$imgfile, LOCK_EX);
                 }
-                else {
-                    echo $url;
-                    return;
-                }
+                echo $url;
+                return;
             }
         }
         return;
