@@ -14,20 +14,7 @@ $add = true;
 
 if (file_exists($counter_filename)) {
 
-	// get current counter state
-	$fp = fopen($counter_filename, "r");
-
-	if ($fp) {
-		$canWrite = false;
-		while (!$canWrite)
-			$canWrite = flock($fp, LOCK_EX);
-
-		while (!feof($fp)) {
-			$line = trim(fgets($fp, 1024));
-		}
-		flock($fp, LOCK_UN);
-		fclose ($fp);
-	}
+	$line = file_get_contents($counter_filename);
 
     // increase counter
     if (isset($line))
@@ -100,16 +87,8 @@ $wikistat = '📊 '.$TXT->Today.' <b><font color="#0080FF">'.$day.'</font></b> &
 if (!$add)
     return;
 
-$fp = fopen($counter_filename, "w+");
-if ($fp) {
-    $canWrite = false;
-    while (!$canWrite)
-        $canWrite = flock($fp, LOCK_EX);
+$add_line = date("z") . ":" . $day . "||" . (date("z")-1) . ":" . $yesterday . "||" . date("W") . ":" . $week . "||" . date("n") . ":" . $month . "||" . date("Y") . ":" . $year . "||" . $all . "||" . $counter_time;
 
-    $add_line1 = date("z") . ":" . $day . "||" . (date("z")-1) . ":" . $yesterday . "||" . date("W") . ":" . $week . "||" . date("n") . ":" . $month . "||" . date("Y") . ":" . $year . "||" . $all . "||" . $counter_time;
-    fwrite($fp, $add_line1);
+file_put_contents($counter_filename, $add_line, LOCK_EX);
 
-    flock($fp, LOCK_UN);
-    fclose($fp);
-}
 ?>
