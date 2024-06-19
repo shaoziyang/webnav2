@@ -1,8 +1,4 @@
 <?php
-/*
-Text Counter by http://www.free-php-counter.com
-You are allowed to remove advertising after you purchased a licence
-*/
 
 // settings
 $counter_filename = str_replace('\\','/',dirname(__FILE__)."/datasets/documents/homepage/counter.txt");
