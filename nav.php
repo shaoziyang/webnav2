@@ -62,7 +62,9 @@ if(file_exists($file_dm)){
 
     if(count($ar) > 0) {
         $tdm = explode('|', $ar[randint_day() % count($ar)]);
-        list($dm, $dmh, $dms) = $tdm;
+        if(isset($tdm[0]))$dm = $tdm[0];
+        if(isset($tdm[1]))$dmh = $tdm[1];
+        if(isset($tdm[2]))$dms = $tdm[2];
     }
 }
 
