@@ -18,11 +18,12 @@
 	<link type="text/css" rel="stylesheet" href="<?= $APP->PATH ?>helpers/material-icons-1.13.6/css/material-icons.css" media="screen,projection"/>
 	<link type="text/css" rel="stylesheet" href="<?= $APP->PATH ?>helpers/font-awesome-4.7.0/css/font-awesome.min.css" media="screen,projection"/>
 	<link type="text/css" rel="stylesheet" href="<?= $APP->PATH ?>helpers/easymde-2.16.1/css/easymde.min.css" media="screen,projection"/>
-	<link type="text/css" rel="stylesheet" href="<?= $APP->PATH ?>helpers/highlightjs-11.7.0/css/<?= ($APP->DARK?"monokai-sublime":"default") ?>.min.css" media="screen,projection">
+	<link type="text/css" rel="stylesheet" href="<?= $APP->PATH ?>helpers/highlightjs-11.9.0/css/<?= ($APP->DARK?"monokai-sublime":"default") ?>.min.css" media="screen,projection">
 	<link type="text/css" rel="stylesheet" href="<?= $APP->PATH ?>helpers/katex-0.16.7/css/katex.min.css" media="screen,projection">
 	<link type="text/css" rel="stylesheet" href="<?= $APP->PATH ?>styles/styles.css" media="screen,projection"/>
 	<link type="text/css" rel="stylesheet" href="<?= $APP->PATH ?>styles/styles-<?= ($APP->DARK?"dark":"light") ?>.css" media="screen,projection"/>
     <?php if(file_exists($APP->DIR."styles/styles-custom.css")): ?><link type="text/css" rel="stylesheet" href="<?= $APP->PATH ?>styles/styles-custom.css" media="screen,projection"/><?php echo "\n"; endif; ?>
+	<link rel="icon" type="image/x-icon" href="<?= $APP->PATH ?>favicon.ico" sizes="any">
 	<link type="image/ico" rel="icon" href="<?= $APP->PATH ?>favicon.ico" sizes="any"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<meta name="theme-color" content="<?= $APP->COLOR ?>">
@@ -167,6 +168,9 @@
 								if(in_array(substr($line,1,2),['h1','h2','h3','h4','h5','h6'])){
 									$anchor=substr($line,8,(strpos($line,'"',8)-8));
 									if($anchor){$line=substr($line,0,strpos($line,'>'))." title='#".$anchor."'><a href='#".$anchor."'></a".substr($line,strpos($line,'>',1));}
+								}
+								if (strpos($line, '<pre><code') !== false) {
+									$line = '<div class="code-container"><button class="copy-btn" onclick="copyCode(this)">Copy</button>' . $line;
 								}
 								$source_final.=$line."\n";
 							}
@@ -372,7 +376,7 @@
 <script>var DOC=<?= json_encode($DOC->export()) ?>;</script>
 <script src="<?= $APP->PATH ?>helpers/jquery-3.7.0/js/jquery.min.js"></script>
 <script src="<?= $APP->PATH ?>helpers/materialize-1.0.0/js/materialize.min.js"></script>
-<script src="<?= $APP->PATH ?>helpers/highlightjs-11.7.0/js/highlight.min.js"></script>
+<script src="<?= $APP->PATH ?>helpers/highlightjs-11.9.0/js/highlight.min.js"></script>
 <script src="<?= $APP->PATH ?>helpers/katex-0.16.7/js/katex.min.js"></script>
 <script src="<?= $APP->PATH ?>helpers/katex-0.16.7/js/auto-render.js"></script>
 <script>renderMathInElement(document.body);</script>
@@ -396,6 +400,26 @@
       new_path=new_path.replace(" ","-").toLowerCase()+"?edit";
       window.location.href=APP.URL+new_path;
     }
+  }
+  function copyCode(button) {
+    // find the nearest code block
+    var codeBlock = button.nextElementSibling;
+    // extract the text content from the code block
+    var codeText = codeBlock.textContent.trim();
+    // create a temporary textarea element to hold the text to be copied
+    var tempTextArea = document.createElement('textarea');
+    tempTextArea.value = codeText;
+    document.body.appendChild(tempTextArea);
+    // select the text in the textarea and copy it
+    tempTextArea.select();
+    document.execCommand('copy');
+    // remove the temporary textarea
+    document.body.removeChild(tempTextArea);
+    // optionally, provide feedback to the user
+    button.textContent = 'Copied!';
+    setTimeout(function() {
+        button.textContent = 'Copy';
+    }, 2000);
   }
 </script>
 <?php

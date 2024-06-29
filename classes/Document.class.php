@@ -173,7 +173,7 @@ final class Document{
 				if(is_dir($this->DIR."/".$element_fe)){continue;}
 				$file_extension=explode(".",$element_fe);
 				// check extensions
-				if(!in_array(end($file_extension),array("png","gif","jpg","jpeg","webp","svg"))){continue;}
+				if(!in_array(end($file_extension),array("png","gif","jpg","jpeg","svg", "webp"))){continue;}
 				// add element to documents array
 				$images_array[]=$element_fe;
 			}
@@ -413,16 +413,20 @@ final class Document{
 	 * @return array of results
 	 */
 	static function search(string $query,?string $parent=null):array{
+		// Decode HTML entities
+		$query = html_entity_decode($query);
 		// trim the query to remove leading and trailing spaces
 		$query = trim($query);
 		// return an empty array if the query is empty after trimming
 		if (empty($query)) {
 			return array();
 		}
+		// parse the query into phrases and individual words
+		preg_match_all('/"([^"]+)"|(\S+)/', $query, $matches);
+		$queries_array = array_filter(array_merge($matches[1], $matches[2]));
 		// tree to array
 		function tree_to_array(&$array,$parent=null){
 			foreach(Document::list($parent) as $dir_fe){
-				//wdf_dump($dir);
 				$array[]=$dir_fe->path;
 				tree_to_array($array,$dir_fe->path);
 			}
@@ -430,9 +434,6 @@ final class Document{
 		// definitions
 		$paths_array=array();
 		$matches_array=array();
-		$queries_array=explode(" ",$query);
-		// check for query or return the empty array
-		if(!count($queries_array)){return $matches_array;}
 		// get all documents directories recursively
 		tree_to_array($paths_array,$parent);
 		//wdf_dump($paths_array);
