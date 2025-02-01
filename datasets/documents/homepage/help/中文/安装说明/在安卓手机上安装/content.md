@@ -25,6 +25,7 @@ apt upgrade
 - 安装 apache2 服务器
 	- 安装：`apt install apache2`
 	- 配置：`nano $PREFIX/etc/apache2/httpd.conf`，设置`DocumentRoot`、`Listen` 等参数，注意在没有 root 情况下，端口号要大于 1000。
+	- 使用 rewrite 模块：将 `#LoadModule rewrite_module libexec/apache2/mod_rewrite.so`一行前的#号删除。
 	- 启动服务器：`httpd`
 	- 其它：
 		- 启动httpd系统服务：`sv up httpd`
@@ -42,7 +43,16 @@ apt upgrade
     DirectoryIndex index.html index.php
 </IfModule>
 ```
-	- 重启httpd服务 `sv restarrt httpd`
+    - 设置服务器目录属性，使能 rewrite、禁用目录列表、允许软链接等（注意修改下面的`xxx`为`DocumentRoot`实际对应目录）。
+```
+<Directory "/data/data/com.termux/files/home/xxx/xxx">
+    Options -Indexes
+    Options FollowSymLinks
+    AllowOverride All
+    Require all granted
+</Directory>
+```
+	- 重启httpd服务 `sv restart httpd`
 - 解压并复制**随心远航**系统到 apache2 服务器的文件目录下（`DocumentRoot` 中设定的目录）
 - 运行浏览器，打开**随心远航**对应网址，进行参数配置
 
