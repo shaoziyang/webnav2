@@ -13,18 +13,18 @@
 # docker buildx build -f docker/production.dockerfile --platform linux/amd64,linux/arm64 --no-cache --push -t zavy86/wikidocs .
 #
 
-FROM alpine:3.15
+FROM alpine:3.20
 
 ARG DEPENDENCIES="\
-apache2 \
-php7 \
-php7-apache2 \
-php7-dom \
-php7-json \
-php7-mbstring \
-php7-session \
-php7-xml \
 shadow \
+apache2-http2 \
+php \
+php-apache2 \
+php-dom \
+php-json \
+php-mbstring \
+php-session \
+php-xml \
 "
 
 # installation
@@ -33,6 +33,7 @@ RUN apk add --no-cache $DEPENDENCIES
 # configure apache
 RUN sed -ri \
     -e 's!^#(LoadModule rewrite_module .*)$!\1!g' \
+    -e 's!^#(LoadModule deflate_module .*)$!\1!g' \
     -e 's!^(\s*AllowOverride) None.*$!\1 All!g' \
     "/etc/apache2/httpd.conf"
 RUN echo "ServerName localhost" >> /etc/apache2/httpd.conf
@@ -44,8 +45,7 @@ COPY . /var/www/localhost/htdocs/
 # make a link for datasets volume
 RUN ln -s /var/www/localhost/htdocs/datasets /
 
-# copy configuration and htacess files from samples
-COPY ./datasets/sample.config.inc.php /var/www/localhost/htdocs/datasets/config.inc.php
+# copy htaccess files from samples
 COPY ./sample.htaccess /var/www/localhost/htdocs/.htaccess
 
 # start script to override apache user's uid/gid
@@ -64,3 +64,4 @@ ENTRYPOINT ["/start.sh"]
 VOLUME /datasets
 
 EXPOSE 80
+

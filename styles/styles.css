@@ -12,13 +12,18 @@
 /* body */
 body{font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
 
-strong, b {font-weight: bold !important;}
+strong, b {font-weight: bold !important;}     
 
 /* bidirectional language support */
 h1,h2,h3,h4,h5,h6,p,code,th,td,div,input{unicode-bidi:plaintext;text-align:start;}
 input:-moz-placeholder{unicode-bidi: plaintext;text-align:start;}
 input:-ms-input-placeholder{unicode-bidi: plaintext;text-align:start;}
 input::-webkit-input-placeholder{unicode-bidi: plaintext;text-align:start;}
+
+/* fixes long strings making side menu freeze */
+h1, h2, h3, h4, p, article ul li, article ol li, td {overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; hyphens: auto;}
+/* font must be defined for international langs to display in monospace */
+code, pre {font-family: Consolas, 'Courier New', Courier, monospace;}
 
 /* headers */
 h1,h2,h3,h4,h5,h6{color:var(--theme-color);font-weight:300;line-height:110%;}
@@ -65,10 +70,11 @@ img.polaroid{width:100%;height:auto;padding:9px;background-color:#ffffff;border:
 code{background:#f0f0f0;padding:0 5px;}
 
 /* tables */
-/*table{width:100%;}
-td{padding:9px;border:1px solid #999999;}
-th{padding:0 9px 0 9px;font-size:0.9rem;font-weight:bold;white-space:pre;color:var(--theme-color)}
-*/
+/* based on markdown rules, tables should be 100% */
+table{width:100%;margin:1rem 0 1rem 0;;}
+td{padding: 9px; border:1px solid #999999;}
+th{padding: 9px; border:1px solid #999999;font-weight:bold;color:var(--theme-color)}
+
 /* input colors */
 input:not([type]):focus:not([readonly]),
 input[type="text"]:not(.browser-default):focus:not([readonly]),
@@ -85,7 +91,7 @@ input[type="search"]:not(.browser-default):focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]){border-bottom:1px solid var(--theme-color);box-shadow:0 1px 0 0 var(--theme-color);-webkit-box-shadow:0 1px 0 0 var(--theme-color);}
 
 /* sidebar */
-header,main,footer{padding-left:240px;}
+header,main,footer{padding-left:300px;}
 @media only screen and (min-width:601px){main>.container{width:100%}}
 @media only screen and (max-width:992px){header,main,footer{padding-left:0;}}
 @media only screen and (max-width:992px){.sidebar-footer{display:none;}} /** @todo verificare come fare in modalita mobile */
@@ -115,7 +121,7 @@ ul.sidenav.sidenav-fixed li.sub_index.active{background-color:#e9e9e9 !important
 .sidebar-footer{position:fixed;bottom:0;left:0;padding:15px 30px 20px;width:299px;border-top:solid 1px #dddddd;background-color:#ffffff;font-size:14px;line-height:1.5;z-index:2;}
 .sidebar-footer .default-title,.sidebar-footer .default-description{display:inline;font-size:12px;}
 .sidebar-footer .default-title{position:relative;margin-right:8px;font-weight:600;}
-.sidebar-footer .default-title:before{position:absolute;top:calc(-50% - 17px);padding:4px 6px;border-radius:3px;background-color:var(--theme-color);color:#ffffff;content:"webnav";letter-spacing:.4px;font-weight:600;font-size:12px;line-height:1;}
+.sidebar-footer .default-title:before{position:absolute;top:calc(-50% - 17px);padding:4px 6px;border-radius:3px;background-color:var(--theme-color);color:#ffffff;content:"webnav2";letter-spacing:.4px;font-weight:600;font-size:10px;line-height:1;}
 
 /* simplemde */
 #editor-form{z-index:300;margin-top:30px;}
@@ -148,3 +154,10 @@ pre.debug{margin:9px;font-size:12px;}
 .copy-btn {position: absolute; top: 5px; right: 5px; padding: 2px 5px; font-size: 12px; cursor: pointer; background-color: var(--theme-color); color: white; border: none; border-radius: 3px;}
 .copy-btn:focus {outline: none;}
 .code-container {position: relative; background: none;}
+
+.table-picker { position: absolute; padding: 3px; z-index: 1000;}
+.table-picker .cell { width: 20px; height: 20px; display: inline-block; margin: 3px; cursor: pointer;}
+
+/* back to top button */
+.top{display:none;position:fixed;bottom:15px;left:240px;z-index:99;font-size:12px;border:none;outline:none;background-color:#4caf50;color:white;cursor:pointer;padding:15px;border-radius:4px;}
+@media only screen and (max-width:992px){.top{left:30px;}}

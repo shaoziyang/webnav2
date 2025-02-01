@@ -20,19 +20,20 @@ require_once(BASE.'classes/WikiDocs.class.php');
 require_once(BASE.'classes/Localization.class.php');
 require_once(BASE.'classes/Document.class.php');
 require_once(BASE.'classes/Session.class.php');
+require_once(BASE.'classes/SecurityFilters.class.php');
 
 // require external libraries
 require_once(BASE."libraries/parsedown-1.8.0-beta-6/Parsedown.php");
 require_once(BASE."libraries/parsedown-extra-0.8.1/ParsedownExtra.php");
 require_once(BASE."libraries/parsedown-extended-1.1.2-modified/ParsedownExtended.php");
 require_once(BASE."libraries/parsedown-filter-0.0.1/ParsedownFilter.php");
-require_once(BASE."libraries/parsedown-plus-0.0.5/ParsedownPlus.php");
+require_once(BASE."libraries/parsedown-plus-0.0.8/ParsedownPlus.php");
 
 // if behind https reverse proxy, set HTTPS property correctly
 if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO']=='https'){$_SERVER['HTTPS']='on';}
 
 // check for configuration file
-if(!file_exists(realpath(dirname(__FILE__))."/datasets/config.inc.php")){die("Wiki|Docs is not configured..<br><br>Launch <a href='setup.php'>Setup</a> script!");}
+if(!file_exists(realpath(dirname(__FILE__))."/datasets/config.inc.php")){header("location:setup.php");}
 
 // include configuration file
 require_once("datasets/config.inc.php");

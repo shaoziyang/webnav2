@@ -140,7 +140,7 @@ function SXYH_ShowNav(Title=''){
     document.write('<div>');
 
     if (Title != '')
-        document.write('<span class="sxyh_nav_Title"><a href="'+APP_PATH()+'homepage/config/nav" title="config">Navigator</a></span>');
+        document.write('<span class="sxyh_nav_Title"><a href="'+APP_PATH()+'homepage/config/nav" title="config">'+Title+'</a></span>');
 
     document.write('<table cellpadding="0" cellspacing="0">');
     document.write('<tr class="no-border"><td width="48" class="sxyh_nav_td">');

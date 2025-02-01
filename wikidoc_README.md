@@ -2,11 +2,11 @@
 
 Just a databaseless markdown flat-file wiki engine.
 
-Project homepage: [https://www.wikidocs.it](https://www.wikidocs.it)
+Project homepage: [https://www.wikidocs.app](https://www.wikidocs.app)
 
 _Please consider supporting this project by making a donation via [PayPal](https://www.paypal.me/zavy86)_
 
-[![Wiki|Docs presentation and contributors recruitment on YouTube](https://wikidocs.it/datasets/documents/homepage/cover-side-project-wikidocs-youtube.jpg)](https://www.youtube.com/watch?v=NFILGeozt7k "Watch Wiki|Docs presentation and contributors recruitment on YouTube")
+[![Wiki|Docs presentation and contributors recruitment on YouTube](https://wikidocs.app/datasets/documents/homepage/cover-side-project-wikidocs-youtube.jpg)](https://youtu.be/x2nVq9RbG54 "Watch Wiki|Docs presentation and contributors recruitment on YouTube")
 
 ## Features
 - Open source
@@ -28,7 +28,7 @@ _Please consider supporting this project by making a donation via [PayPal](https
 - and many more...
 
 ## Demo
-Try the demo playground at: [http://demo.wikidocs.it](http://demo.wikidocs.it)
+Try the demo playground at: [http://demo.wikidocs.app](http://demo.wikidocs.app)
 
 Authentication code is: `demo`
 
@@ -69,16 +69,18 @@ services:
 ## Apache Configuration
 
 ### Automatic
-- The `setup.php` script will automatically create both `datasets/config.inc.php` and `.htacess` files
+- The `setup.php` script will automatically create both `datasets/config.inc.php` and `.htaccess` files
 
 ### Manual
-- Copy the configuration sample file `cp datasets/config.sample.inc.php datasets/config.inc.php`
+- Copy the configuration sample file `cp config.sample.inc.php datasets/config.inc.php`
 - Edit the configuration file `nano datasets/config.inc.php`
 - Create the `.htaccess` file like this:
 ```
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 	RewriteBase /
+	RewriteCond %{REQUEST_URI} \.md$ [NC]
+	RewriteRule ^.*$ / [R=301,L]
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule ^(.*)$ index.php?doc=$1 [NC,L,QSA]
 </IfModule>
@@ -89,20 +91,23 @@ services:
 
 ### Manual
 - Use this as Nginx configuration for WikiDocs:
-  ```
-  ...
-    location ~* \.(css|js|jpg|jpeg|png|gif|ico|svg)$ {
-        try_files $uri =404;
-        add_header Cache-Control "public, max-age=3600";
-    }
-    location / {
-        if (!-e $request_filename){
-            rewrite ^/(.*)$ /index.php?doc=$1 last;
-        }
-        try_files $uri $uri/ =404;
-    }
-  ```
-- Copy the configuration sample file `cp datasets/config.sample.inc.php datasets/config.inc.php`
+```
+location ~* \.(css|js|jpg|jpeg|png|gif|ico|svg)$ {
+  try_files $uri =404;
+  add_header Cache-Control "public, max-age=3600";
+}
+location ~* \.md$ {
+  return 301 /;
+}
+location / {
+  if (!-e $request_filename){
+    rewrite ^/(.*)$ /index.php?doc=$1 last;
+  }
+  try_files $uri $uri/ =404;
+}
+```
+
+- Copy the configuration sample file `cp config.sample.inc.php datasets/config.inc.php`
 - Edit the configuration file `nano datasets/config.inc.php`
 
 ## Customization
@@ -132,6 +137,11 @@ You can customize the default template by creating the file `styles/styles-custo
 - [Nicolas Prenveille](https://github.com/nicolas35380)
 - [Antonio Rodrigues](https://github.com/aaadonai)
 - [Miguel Renato](https://github.com/MiguelRenato)
+- [Alain Martini](https://github.com/inalto)
+- [Davide Visentin](https://github.com/dvisentin-freelance)
+- [Christian Weber](https://github.com/pce-consulting)
+- [Petr Husák](https://github.com/petrhusak)
+- [Oliver Lehmann](https://github.com/OlliL)
 
 ## License
 Code released under the MIT License

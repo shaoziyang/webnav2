@@ -12,7 +12,7 @@
 $('body').on('click','.image-picker',function(){
 	image_tag=$(this).attr("image");
 	simplemde.codemirror.replaceSelection('![]('+DOC.PATH+'/'+image_tag+')');
-	$("#modal_uploader").modal("close");
+	$("#modal_image_uploader").modal("close");
 });
 
 
@@ -22,7 +22,7 @@ $('body').on('click','.image-picker',function(){
 document.querySelectorAll('.image-delete').forEach(item => {
 	item.addEventListener('click', event => {
 		let image_name = item.attributes.image.value;
-
+		if(!confirm(confirm_image_delete)){return;}
 		$.ajax({
 			url: APP.PATH+"submit.php?act=image_delete_ajax",
 			type: "post",
@@ -33,7 +33,6 @@ document.querySelectorAll('.image-delete').forEach(item => {
 			success: function( response ) {
 				let decodedResponse = JSON.parse(response);
 				console.log(decodedResponse.code + " => " + decodedResponse.file);
-
 				if ( decodedResponse.error === 1 ){
 					alert(decodedResponse.code);
 				} else {
