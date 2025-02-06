@@ -29,7 +29,7 @@
   <meta name="theme-color" content="<?= $APP->COLOR ?>">
   <style>:root{--theme-color:<?= $APP->COLOR ?>;}</style>
   <title><?= ($DOC->ID!="homepage"?$DOC->TITLE." - ":null).$APP->TITLE ?></title>
-  <?php include "common.php"; include "nav.php"; include "pageview.php"; include "filecount.php"; include "counter.php"; include "recent.php"; ?>
+  <?php include "nav.php"; include "pageview.php"; include "filecount.php"; include "counter.php"; include "recent.php"; ?>
   <script src="<?= $APP->PATH ?>scripts/custom.js"></script>
   <?php if(strlen(GTAG ?? '') && Session::getInstance()->privacyAgreeded()): ?>
     <!-- Global site tag (gtag.js) - Google Analytics -->

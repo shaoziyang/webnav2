@@ -2,8 +2,6 @@
 
 if(!isset($_GET['cmd'])) return;
 
-include "common.php";
-
 $url = urldecode($_SERVER['REQUEST_URI']);
 
 $APP_PATH = substr($url, 0, strpos($url, 'custom.php'));
@@ -12,8 +10,26 @@ if($DIR_PATH[-1] != '/')$DIR_PATH .= '/';
 $DAT_PATH = $DIR_PATH.'datasets/documents/';
 $CFG_PATH = $DAT_PATH.'homepage/config/';
 
-
 $cmd = Strtoupper($_GET['cmd']);
+
+// generate daily random numbers for daily quotes
+function randint_day(){
+    $D1 = new DateTime('2000-01-01');
+    $D2 = new DateTime();
+    $n = $D1->diff($D2)->days;  // get date difference
+    for($i=0;$i<5;$i++)         // iteration 5 times
+        $n = (31415*($n%0xffff)+($n>>16)+31)%0xfffffff;
+    return $n;
+}
+
+// return image filename array
+function getImagelist($path) {
+    $image_list = array_merge(glob($path.'*.png'), glob($path.'*.jpg'), glob($path.'*.jpeg'), glob($path.'*.svg'), glob($path.'*.webp'));
+    foreach ($image_list as &$v){
+        $v = substr($v, strlen($path));
+    }
+    return $image_list;
+}
 
 // get random image
 function random_image($mode) {
