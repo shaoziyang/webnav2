@@ -67,6 +67,64 @@ function random_js($mode) {
         return $js_list[randint_day()%count($js_list)];
 }
 
+function AnalyseConfig($path, &$arr) {
+    global $CFG_PATH;
+    
+    $arr = '';
+
+    if ((isset($_GET['file']))and($_GET['file']!=''))
+        $file = $CFG_PATH.$path.$_GET['file'];
+    else
+        $file = $CFG_PATH.$path.'content.md';
+
+    if(file_exists($file)){
+        // load file to array
+        $ss = file($file);
+
+        foreach($ss as $v){
+            // trim blank
+            $a = trim($v);
+            if ($a == '') continue;
+            // first char must be '-' or '*'
+            if (($a[0] <> '-')&&(($a[0] <> '*'))) continue;
+            // replace '，' to ',' then explode to sub-array $tmp
+            $tmp = explode('|', substr($a, 1));
+            $arr = $arr.'[';
+            for($n=0; $n<count($tmp); $n++){
+                $arr = $arr.'"'.trim($tmp[$n]).'"';
+                if($n!=(count($tmp)-1))$arr = $arr.',';
+            }
+            $arr = $arr.'],';
+        }
+    }
+    // add '[ ]'
+    $arr = '['.$arr.'[""]]';
+}
+
+function get_nav() {
+
+    $arr_nd = '';
+    AnalyseConfig("nav/", $arr_nd);
+
+    return $arr_nd;
+}
+
+function get_search() {
+
+    $arr_sd = '';
+    AnalyseConfig("search/", $arr_sd);
+
+    return $arr_sd;
+}
+
+function get_dailymotto() {
+    
+    $arr_md = '';
+    AnalyseConfig("dailymotto/", $arr_md);
+
+    return $arr_md;
+}
+
 /*
 custom.php?cmd=xxx&
 cmd:
@@ -78,6 +136,9 @@ cmd:
   JS_OF_DAY
   JS_OF_RANDOM
 
+  NAV
+  SEARCH
+  DAILYMOTTO
 */
 switch($cmd) {
     case "IMAGE_OF_DAY":
@@ -136,6 +197,15 @@ switch($cmd) {
     case "JS_OF_RANDOM":
         echo random_js(0);
         return;
+    case "NAV":
+		echo get_nav();
+		return;
+    case "SEARCH":
+        echo get_search();
+        return;
+	case "DAILYMOTTO":
+        echo get_dailymotto();
+		return;
     default: return;
 }
 

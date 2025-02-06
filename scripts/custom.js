@@ -91,106 +91,157 @@ function openUrlWithNewWindow(url) {
     window.open(url);
 }
 
+// generate daily random numbers for daily quotes
+function randint_day(){
+    D1 = new Date('2000-01-01');
+    D2 = new Date();
+    let n = Math.floor((D2 -D1)/(1000 * 60 * 60 * 24));  // get date difference
+    for(i=0;i<5;i++){            // iteration 5 times
+        n = (31415*(n%0xffff)+(n>>16)+31)%0xfffffff;
+    }
+    return n;
+}
 
 // show search
-function SXYH_ShowSearch(Title='') {
-    document.write('<div>');
+function SXYH_ShowSearch(file='', Title='') {
+    document.write('<div id="SXYH_SEARCH_'+file+'"></div>');
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", APP_PATH()+"custom.php?cmd=SEARCH&file="+file, true);
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4 && xhr.status === 200) {
+			r = xhr.responseText;
+			console.log(r);
+			let SXYH_ArraySearch = JSON.parse(r);
+			div_search = document.getElementById("SXYH_SEARCH_"+file);
+			s = '';
+            if (Title !='')
+                s = s+'<span class="sxyh_search_Title">'+Title+'</span>';
 
-    // show search title
-    if (Title !='')
-        document.write('<span class="sxyh_search_Title"><a href="'+APP_PATH()+'homepage/config/search" title="config">Search</a></span>');
+            for (i=0; i<SXYH_ArraySearch.length; i++){
 
-    for (i=0; i<SXYH_ArraySearch.length; i++){
+                if(SXYH_ArraySearch[i].length < 1) continue;
 
-        if(SXYH_ArraySearch[i].length < 1) continue;
+                vid = "SearchInput" + i;
 
-        vid = "SearchInput" + i;
+                // button
+                v0 = SXYH_ArraySearch[i][0];
+                v1 = v2 = v3 = v4 = "";
+                // button url
+                if(SXYH_ArraySearch[i].length > 1)
+                    v1 = SXYH_ArraySearch[i][1];
+                // button url placeholder
+                if(SXYH_ArraySearch[i].length > 2)
+                    v2 = SXYH_ArraySearch[i][2];
+                // button url placeholder input_style
+                if(SXYH_ArraySearch[i].length > 3)
+                    v3 = SXYH_ArraySearch[i][3];
+                // button url placeholder input_style button_style
+                if(SXYH_ArraySearch[i].length > 4)
+                    v4 = SXYH_ArraySearch[i][4];
 
-        // button
-        v0 = SXYH_ArraySearch[i][0];
-        v1 = v2 = v3 = v4 = "";
-        // button url
-        if(SXYH_ArraySearch[i].length > 1)
-            v1 = SXYH_ArraySearch[i][1];
-        // button url placeholder
-        if(SXYH_ArraySearch[i].length > 2)
-            v2 = SXYH_ArraySearch[i][2];
-        // button url placeholder input_style
-        if(SXYH_ArraySearch[i].length > 3)
-            v3 = SXYH_ArraySearch[i][3];
-        // button url placeholder input_style button_style
-        if(SXYH_ArraySearch[i].length > 4)
-            v4 = SXYH_ArraySearch[i][4];
+                if((v1.indexOf('://') == -1)||(i == 0)) {
+                    search_str = '<div class="sxyh_search_category"><span class="sxyh_search_category" style="'+v4+'">'+SXYH_ArraySearch[i][0]+'</span></div>';
+                }
+                else {
+                    search_str = '<div class="sxyh_search_container"><form onclick="return false"><input class="sxyh_search_input browser-default" style="'+v3+'" type="text" id="'+vid+'" placeholder="'+v2+'"> <button class="sxyh_search_button" style="'+v4+'" onclick="openUrlWithQuery(\''+v1+'\' , \''+ vid+'\')">'+v0+'</button></form></div>';
+                }
 
-        if((v1.indexOf('://') == -1)||(i == 0)) {
-            search_str = '<div class="sxyh_search_category"><span class="sxyh_search_category" style="'+v4+'">'+SXYH_ArraySearch[i][0]+'</span></div>';
-        }
-        else {
-            search_str = '<div class="sxyh_search_container"><form onclick="return false"><input class="sxyh_search_input browser-default" style="'+v3+'" type="text" id="'+vid+'" placeholder="'+v2+'"> <button class="sxyh_search_button" style="'+v4+'" onclick="openUrlWithQuery(\''+v1+'\' , \''+ vid+'\')">'+v0+'</button></form></div>';
-        }
-
-        // write
-        document.write(search_str);
-    }
-    document.write('</div>');
+                s = s + search_str;
+            }
+			div_search.innerHTML = s;
+		}
+	};
+	xhr.send();
 }
 
 // show navigator
-function SXYH_ShowNav(Title=''){
-    document.write('<div>');
+function SXYH_ShowNav(file='', Title=''){
+    document.write('<div id="SXYH_NAV_'+file+'"></div>');
+    var xhr = new XMLHttpRequest();
+	xhr.open("POST", APP_PATH()+"custom.php?cmd=NAV&file="+file, true);
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4 && xhr.status === 200) {
+			r = xhr.responseText;
+			let SXYH_ArrayNav = JSON.parse(r);
+			let div_nav = document.getElementById("SXYH_NAV_"+file);
+			s = '';
+			if (Title != '')
+			    s = s +'<span class="sxyh_nav_Title">'+Title+'</span>';
+			s = s + '<table cellpadding="0" cellspacing="0"><tr class="no-border"><td width="48" class="sxyh_nav_td">';
+			
+			for (i=0; i<SXYH_ArrayNav.length; i++) {
 
-    if (Title != '')
-        document.write('<span class="sxyh_nav_Title"><a href="'+APP_PATH()+'homepage/config/nav" title="config">'+Title+'</a></span>');
+                if(SXYH_ArrayNav[i].length < 1) continue;
 
-    document.write('<table cellpadding="0" cellspacing="0">');
-    document.write('<tr class="no-border"><td width="48" class="sxyh_nav_td">');
+                text = SXYH_ArrayNav[i][0];
+                link = '';
+                tip = '';
+                style = '';
 
-    for (i=0; i<SXYH_ArrayNav.length; i++) {
+                // link
+                if(SXYH_ArrayNav[i].length > 1)
+                    link = SXYH_ArrayNav[i][1];
+                // tip
+                if(SXYH_ArrayNav[i].length > 2)
+                    tip = SXYH_ArrayNav[i][2];
+                // link style
+                if(SXYH_ArrayNav[i].length > 3)
+                    style = SXYH_ArrayNav[i][3];
 
-        if(SXYH_ArrayNav[i].length < 1) continue;
+                if((SXYH_ArrayNav[i].length < 2)||(i == 0)||(link.indexOf('/')==-1)){
+                    if((style=='')&&(tip=='')&&(link!=''))
+                        style=link;
+                    nav_str = '</td></tr><tr class="no-border"><td class="sxyh_nav_td"><span class="sxyh_nav_category"  title="'+tip+'" style="'+style+'">'+text+'</span></td><td class="sxyh_nav_td">';
+                }
+                else{
+                    link = link.replace('{{APP_PATH}}', APP_PATH());
+                    link = link.replace('{{DOC_PATH}}', DOC_PATH());
+                    v = '<a class="sxyh_nav_link" href="'+link+'" onclick="openUrlWithNewWindow(\''+link+'\');return false;" title="'+tip+'" style="'+style+'">'+text+'</a>';
+                    nav_str = '<div class="sxyh_nav_container">'+v+'</div> '
+                }
 
-        text = SXYH_ArrayNav[i][0];
-        link = '';
-        tip = '';
-        style = '';
-
-        // link
-        if(SXYH_ArrayNav[i].length > 1)
-            link = SXYH_ArrayNav[i][1];
-        // tip
-        if(SXYH_ArrayNav[i].length > 2)
-            tip = SXYH_ArrayNav[i][2];
-        // link style
-        if(SXYH_ArrayNav[i].length > 3)
-            style = SXYH_ArrayNav[i][3];
-
-        if((SXYH_ArrayNav[i].length < 2)||(i == 0)||(link.indexOf('/')==-1)){
-            if((style=='')&&(tip=='')&&(link!=''))
-                style=link;
-            nav_str = '</td></tr><tr class="no-border"><td class="sxyh_nav_td"><span class="sxyh_nav_category"  title="'+tip+'" style="'+style+'">'+text+'</span></td><td class="sxyh_nav_td">';
-        }
-        else{
-            link = link.replace('{{APP_PATH}}', APP_PATH());
-            link = link.replace('{{DOC_PATH}}', DOC_PATH());
-            v = '<a class="sxyh_nav_link" href="'+link+'" onclick="openUrlWithNewWindow(\''+link+'\');return false;" title="'+tip+'" style="'+style+'">'+text+'</a>';
-            nav_str = '<div class="sxyh_nav_container">'+v+'</div> '
-        }
-
-        document.write(nav_str);
-    }
-
-    document.write('</td></tr></table></div>');
+                s = s + nav_str;
+			}
+			s = s + '</td></tr></table>';
+			div_nav.innerHTML = s;
+		}
+	};
+	xhr.send();
 }
 
 // show Daily Motto
 function SXYH_ShowDailyMotto(style=""){
-    if (SXYH_dm == '')
-        SXYH_dm = 'Nothing is impossible';
-    
-    if (SXYH_dm_style != '')
-        style = SXYH_dm_style;
+document.write('<div class="SXYH_divDiaryMotto" id="SXYH_DAILYMOTTO"></div>');
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", APP_PATH()+"custom.php?cmd=DAILYMOTTO", true);
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4 && xhr.status === 200) {
+			r = xhr.responseText;
+			let SXYH_dm = '';
+			let SXYH_dm_style = '';
+			let SXYH_dm_hint = '';
+			let SXYH_ArrayDm = JSON.parse(r);
+            if (SXYH_ArrayDm.length > 1){
+                d = SXYH_ArrayDm[randint_day()%(SXYH_ArrayDm.length-1)];
+                if (d.length > 0) SXYH_dm = d[0];
+                if (d.length > 1) SXYH_dm_hint = d[1];
+                if (d.length > 2) SXYH_dm_style = d[2];
+            }
+			if(SXYH_dm == ''){
+                SXYH_dm = 'Nothing is impossible';
+                SXYH_dm_hint = '没有什么是不可能的';
+            }
+            if (SXYH_dm_style != '')
+                style = SXYH_dm_style;
 
-    document.write('<div class="SXYH_divDiaryMotto"><span class="SXYH_DiaryMotto" style="'+style+'" TITLE="'+SXYH_dm_hint+'">'+SXYH_dm+'</span></div>');
+            div_dailymotto = document.getElementById("SXYH_DAILYMOTTO");
+			div_dailymotto.innerHTML = '<span class="SXYH_DiaryMotto" style="'+style+'" TITLE="'+SXYH_dm_hint+'">'+SXYH_dm+'</span>';
+		}
+	};
+	xhr.send();
 }
 
 function decodeHtmlEntities(encodedString) {
