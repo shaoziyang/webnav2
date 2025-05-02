@@ -125,6 +125,57 @@ function get_dailymotto() {
     return $arr_md;
 }
 
+function get_new_content($NUM=20) {
+    $xmlFilePath = 'sitemap.xml';
+
+    // 判断文件是否存在
+    if (!file_exists($xmlFilePath)) {
+        return "";
+    }
+
+    // 读取并解析 XML 文件
+    $xml = file_get_contents($xmlFilePath);
+    $dom = new DOMDocument();
+    $dom->loadXML($xml);
+    $xpath = new DOMXPath($dom);
+    $xpath->registerNamespace('ns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+    $urls = [];
+
+    // 提取数据
+    foreach ($xpath->query('//ns:url') as $urlNode) {
+        $loc = $xpath->evaluate('string(ns:loc)', $urlNode);
+        $lastmod = $xpath->evaluate('string(ns:lastmod)', $urlNode);
+
+        // 忽略非法时间（例如 1970）
+        if ($lastmod === '1970-01-01T08:00:00+08:00') {
+            continue;
+        }
+
+        $urls[] = [
+            'time' => strtotime($lastmod),
+            'url' => $loc,
+        ];
+    }
+
+    // 自定义比较函数，按 lastmod 时间字符串比较
+    usort($urls, function($a, $b) {
+        return strcmp($b['time'], $a['time']);
+    });
+
+    // 只保留最多 50 条，默认 20 条
+    $urls = array_slice($urls, 0, min($NUM, 50));
+
+    $output = '';
+    foreach ($urls as $item) {
+        $output .= date('Y-m-d H:i:s', $item['time']).",{$item['url']}|";
+    }
+
+    // 去掉最后一个冒号
+    $output = rtrim($output, ':');
+
+    echo $output;
+}
+
 /*
 custom.php?cmd=xxx&
 cmd:
@@ -139,6 +190,8 @@ cmd:
   NAV
   SEARCH
   DAILYMOTTO
+  
+  NEW
 */
 switch($cmd) {
     case "IMAGE_OF_DAY":
@@ -198,14 +251,17 @@ switch($cmd) {
         echo random_js(0);
         return;
     case "NAV":
-		echo get_nav();
-		return;
+        echo get_nav();
+        return;
     case "SEARCH":
         echo get_search();
         return;
-	case "DAILYMOTTO":
+    case "DAILYMOTTO":
         echo get_dailymotto();
-		return;
+        return;
+    case "NEW":
+        echo get_new_content();
+        return;
     default: return;
 }
 

@@ -398,3 +398,28 @@ function update_filecount(){
 }
 
 update_filecount();
+
+
+function SXYH_new_content() {
+    document.write('<span id="SXYH_NEW_CONTENT_LIST"> </span>');
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", APP_PATH()+"custom.php?cmd=NEW", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            r = xhr.responseText;
+            if (r == '')
+                return;
+            d = r.split('|');
+            r = '';
+            for(i = 0; i < d.length; i++){
+                a = d[i].split(',');
+                if(a.length > 1)
+                    r += '<li> '+a[0]+', <a href='+a[1]+'>'+a[1]+'</a></li>';
+            }
+            e = document.getElementById("SXYH_NEW_CONTENT_LIST");
+            e.innerHTML = '<ol type="1">'+r+'</ol>';
+        }
+    };
+    xhr.send();
+}
