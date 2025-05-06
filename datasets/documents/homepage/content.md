@@ -2,6 +2,7 @@
 
 <script>
 SXYH_ShowDailyMotto();
+SXYH_js("holidayCountdown.js");
 SXYH_ShowNav();
 SXYH_ShowSearch();
 SXYH_setwallpaper("BING_AUTOSAVE");
