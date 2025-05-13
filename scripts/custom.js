@@ -1,425 +1,411 @@
-// insert "insertStr" to "str"
-function insertStr (str, index, insertStr) {
-    return str.substring(0, index) + insertStr + str.substring(index);
-}
+// 字符串处理工具
+const StringUtils = {
+    // 在指定位置插入字符串
+    insert(str, index, insertStr) {
+        return str.substring(0, index) + insertStr + str.substring(index);
+    },
+    
+    // 左侧补零
+    padLeft(num, length) {
+        return (Array(length).join('0') + num).slice(-length);
+    },
+    
+    // 解码HTML实体
+    decodeHtmlEntities(encodedString) {
+        const textArea = document.createElement('textarea');
+        textArea.innerHTML = encodedString;
+        return textArea.value;
+    }
+};
 
-// fill zero in left
-function padLeft(num, length) {
-    return (Array(length).join('0') + num).slice(-length);
-}
+// URL路径工具
+const PathUtils = {
+    // 获取主机名
+    getHostName() {
+        const url = window.location.href;
+        let position = -1;
+        let count = 0;
 
-// get host name
-function HostName(){
-    let url=window.location.href;
-    let position = -1;
-    let count = 0;
-
-    for (let i = 0; i<url.length ; i++) {
-        if (url[i] === '/') {
-            count++;
-            if (count === 3) {
-                position = i;
-                break;
+        for (let i = 0; i < url.length; i++) {
+            if (url[i] === '/') {
+                count++;
+                if (count === 3) {
+                    position = i;
+                    break;
+                }
             }
         }
+
+        return position === -1 ? "" : url.substr(0, position + 1);
+    },
+
+    // 获取文档路径
+    DOC_PATH() {
+        let pathname = document.location.pathname;
+        if (pathname.substr(-1) !== '/') pathname += '/';
+        const index = pathname.substr(1).indexOf("/");
+        return StringUtils.insert(pathname, index + 1, '/datasets/documents');
+    },
+
+    // 获取应用路径
+    APP_PATH() {
+        const pathname = document.location.pathname;
+        const index = pathname.substr(1).indexOf("/");
+        return pathname.substr(0, index + 2);
+    },
+
+    // 获取主页路径
+    getHomePath() {
+        return this.APP_PATH() + 'datasets/documents/';
+    },
+
+    // 获取图片路径
+    getImagePath() {
+        return this.getHomePath() + 'homepage/config/images/';
+    },
+
+    // 获取JavaScript路径
+    getJsPath() {
+        return this.getHomePath() + 'homepage/config/javascript/';
     }
+};
 
-    if (position == -1)
-        return "";
-    else
-        return url.substr(0,position+1);
+// HTTP请求工具
+const HttpUtils = {
+    // 发送异步POST请求
+    async post(url) {
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return await response.text();
+        } catch (error) {
+            console.error('Fetch error:', error);
+            throw error;
+        }
+    }
+};
+
+// 随机数生成器
+const RandomUtils = {
+    // 生成基于日期的随机数
+    randintDay() {
+        const D1 = new Date('2000-01-01');
+        const D2 = new Date();
+        let n = Math.floor((D2 - D1) / (1000 * 60 * 60 * 24)); // 获取日期差
+        
+        // 迭代5次生成更随机的数
+        for (let i = 0; i < 5; i++) {
+            n = (31415 * (n % 0xffff) + (n >> 16) + 31) % 0xfffffff;
+        }
+        
+        return n;
+    }
+};
+
+// DOM操作工具
+const DomUtils = {
+    // 在文档中写入内容
+    write(content) {
+        document.write(content);
+    },
+    
+    // 获取DOM元素
+    getElement(id) {
+        return document.getElementById(id);
+    }
+};
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// like {{DOC_PATH}}
-function DOC_PATH(){
-    var pathname=document.location.pathname;
-
-    if((pathname.substr(-1))!='/') pathname = pathname + '/';
-
-    var index=pathname.substr(1).indexOf("/");
-    return insertStr(pathname, index+1, '/datasets/documents');
+// 导航栏显示功能
+async function SXYH_ShowNav(file = '', title = '') {
+    DomUtils.write(`<div id="SXYH_NAV_${file}"></div>`);
+    try {
+        await delay(100);
+        const response = await HttpUtils.post(`${PathUtils.APP_PATH()}custom.php?cmd=NAV&file=${file}`);
+        const navItems = JSON.parse(response);
+        const navElement = DomUtils.getElement(`SXYH_NAV_${file}`);
+        let html = '';
+        
+        if (title) {
+            html += `<span class="sxyh_nav_Title">${title}</span>`;
+        }
+        
+        html += '<table cellpadding="0" cellspacing="0"><tr class="no-border"><td width="48" class="sxyh_nav_td">';
+        
+        navItems.forEach((item, index) => {
+            if (item.length < 1) return;
+            
+            const [text, link = '', tip = '', style = ''] = item;
+            
+            if (item.length < 2 || index === 0 || link.indexOf('/') === -1) {
+                const categoryStyle = style === '' && tip === '' && link !== '' ? link : style;
+                html += `</td></tr><tr class="no-border"><td class="sxyh_nav_td"><span class="sxyh_nav_category" title="${tip}" style="${categoryStyle}">${text}</span></td><td class="sxyh_nav_td">`;
+            } else {
+                const resolvedLink = link.replace('{{APP_PATH}}', PathUtils.APP_PATH())
+                                         .replace('{{DOC_PATH}}', PathUtils.DOC_PATH());
+                html += `<div class="sxyh_nav_container"><a class="sxyh_nav_link" href="${resolvedLink}" onclick="openUrlWithNewWindow('${resolvedLink}');return false;" title="${tip}" style="${style}">${text}</a></div>`;
+            }
+        });
+        
+        html += '</td></tr></table>';
+        navElement.innerHTML = html;
+    } catch (error) {
+        console.error('Error parsing navigation data:', error);
+    }
 }
 
-// like {{APP_PATH}}
-function APP_PATH(){
-    var pathname=document.location.pathname;
-    var index=pathname.substr(1).indexOf("/");
-    return pathname.substr(0,index+2);
+// 搜索框显示功能
+async function SXYH_ShowSearch(file = '', title = '') {
+    DomUtils.write(`<div id="SXYH_SEARCH_${file}"></div>`);
+    try {
+        await delay(200);
+        const response = await HttpUtils.post(`${PathUtils.APP_PATH()}custom.php?cmd=SEARCH&file=${file}`);
+        const searchItems = JSON.parse(response);
+        const searchElement = DomUtils.getElement(`SXYH_SEARCH_${file}`);
+        let html = '';
+        
+        if (title) {
+            html += `<span class="sxyh_search_Title">${title}</span>`;
+        }
+        
+        searchItems.forEach((item, index) => {
+            if (item.length < 1) return;
+            
+            const [v0, v1 = '', v2 = '', v3 = '', v4 = ''] = item;
+            const vid = `SearchInput${index}`;
+            
+            if ((v1.indexOf('://') === -1) || (index === 0)) {
+                html += `<div class="sxyh_search_category"><span class="sxyh_search_category" style="${v4}">${v0}</span></div>`;
+            } else {
+                html += `<div class="sxyh_search_container"><form onclick="return false"><input class="sxyh_search_input browser-default" style="${v3}" type="text" id="${vid}" placeholder="${v2}"> <button class="sxyh_search_button" style="${v4}" onclick="openUrlWithQuery('${v1}' , '${vid}')">${v0}</button></form></div>`;
+            }
+        });
+        
+        searchElement.innerHTML = html;
+    } catch (error) {
+        console.error('Error parsing search data:', error);
+    }
 }
 
-// homepage/
-function HOME_PATH(){
-    return APP_PATH() + 'datasets/documents/';
+// 每日格言显示功能
+async function SXYH_ShowDailyMotto(style = "") {
+    DomUtils.write('<div class="SXYH_divDiaryMotto" id="SXYH_DAILYMOTTO"></div>');
+    try {
+        await delay(300);
+        const response = await HttpUtils.post(`${PathUtils.APP_PATH()}custom.php?cmd=DAILYMOTTO`);
+        const mottoItems = JSON.parse(response);
+        const mottoElement = DomUtils.getElement("SXYH_DAILYMOTTO");
+        let motto = 'Nothing is impossible';
+        let hint = '没有什么是不可能的';
+        let mottoStyle = style;
+        
+        if (mottoItems.length > 1) {
+            const dailyIndex = RandomUtils.randintDay() % (mottoItems.length - 1);
+            const dailyMotto = mottoItems[dailyIndex];
+            
+            if (dailyMotto.length > 0) motto = dailyMotto[0];
+            if (dailyMotto.length > 1) hint = dailyMotto[1];
+            if (dailyMotto.length > 2) mottoStyle = dailyMotto[2];
+        }
+        
+        mottoElement.innerHTML = `<span class="SXYH_DiaryMotto" style="${mottoStyle}" title="${hint}">${motto}</span>`;
+    } catch (error) {
+        console.error('Error parsing daily motto data:', error);
+    }
 }
 
-// homepage/config/images/
-function IMAGE_PATH(){
-    return HOME_PATH() + 'homepage/config/images/';
+// 设置壁纸功能
+async function SXYH_setwallpaper(img = "", opacity = 0.8, size = "cover") {
+    const v = StringUtils.decodeHtmlEntities(img).replace(/\\/g, "/");
+    
+    // 根据不透明度确定遮罩层
+    let opacityFile = '';
+    switch (Math.floor(opacity * 10)) {
+        case 9: opacityFile = 'opacity_90.png'; break;
+        case 8: opacityFile = 'opacity_80.png'; break;
+        case 7: opacityFile = 'opacity_70.png'; break;
+        case 6: opacityFile = 'opacity_60.png'; break;
+        case 5: opacityFile = 'opacity_50.png'; break;
+        case 4: opacityFile = 'opacity_40.png'; break;
+        case 3: opacityFile = 'opacity_30.png'; break;
+        case 2: opacityFile = 'opacity_20.png'; break;
+        case 1: opacityFile = 'opacity_10.png'; break;
+        case 0: opacityFile = ''; break;
+        default: return;
+    }
+    
+    const opacityUrl = opacityFile ? `url(${PathUtils.APP_PATH()}scripts/${opacityFile}),` : '';
+    
+    if (v === "" || ["RANDOM", "DAY", "BING", "BING_AUTOSAVE"].includes(v)) {
+        try {
+            const response = await HttpUtils.post(`${PathUtils.APP_PATH()}custom.php?cmd=IMAGE_OF_${v || "RANDOM"}`);
+            const imageUrl = response.indexOf('://') === -1 ? PathUtils.getImagePath() + response : response;
+            document.body.style.background = `${opacityUrl}url(${imageUrl}) no-repeat fixed center`;
+            document.body.style.backgroundSize = size;
+            SXYH_WALLPAPER_CURRENT = response;
+        } catch (error) {
+            console.error('Error setting wallpaper:', error);
+        }
+    } else {
+        let imageUrl = "";
+        if (v.substr(0, '{{IMG_LIB}}'.length) === '{{IMG_LIB}}') {
+            imageUrl = PathUtils.getImagePath() + v.substr('{{IMG_LIB}}'.length);
+        } else if (v.indexOf("/") > -1) {
+            imageUrl = v;
+        } else {
+            imageUrl = PathUtils.DOC_PATH() + v;
+        }
+        
+        document.body.style.background = `${opacityUrl}url(${imageUrl}) no-repeat fixed center`;
+        document.body.style.backgroundSize = size;
+        SXYH_WALLPAPER_CURRENT = imageUrl;
+    }
 }
 
-// homepage/config/javascript/
-function JS_PATH(){
-    return HOME_PATH() + 'homepage/config/javascript/';
+// 获取图片路径功能
+async function SXYH_getimage(img = "") {
+    const v = StringUtils.decodeHtmlEntities(img).replace(/\\/g, "/");
+    
+    if (v === "" || ["RANDOM", "DAY", "BING", "BING_AUTOSAVE"].includes(v)) {
+        try {
+            const response = await HttpUtils.post(`${PathUtils.APP_PATH()}custom.php?cmd=IMAGE_OF_${v || "RANDOM"}`);
+            const imageUrl = response.indexOf('://') === -1 ? PathUtils.getImagePath() + response : response;
+            console.log(imageUrl);
+            return imageUrl;
+        } catch (error) {
+            console.error('Error getting image:', error);
+            throw error;
+        }
+    } else {
+        let imageUrl = "";
+        if (v.substr(0, '{{IMG_LIB}}'.length) === '{{IMG_LIB}}') {
+            imageUrl = PathUtils.getImagePath() + v.substr('{{IMG_LIB}}'.length);
+        } else if (v.indexOf("/") > -1) {
+            imageUrl = v;
+        } else {
+            imageUrl = PathUtils.DOC_PATH() + v;
+        }
+        
+        return imageUrl;
+    }
 }
 
-
-function showimage(img, width) {
-    var fn = DOC_PATH() + img;
-    document.write('<a href="'+fn+'"><img src="'+fn+'" width="'+width+'"></a>');
+// 显示图片库功能
+async function SXYH_ShowImageLibrary(title = '', showfilename = true) {
+    DomUtils.write('<div>');
+    if (title) {
+        DomUtils.write(`<span class="sxyh_nav_Title">${title}</span>`);
+    }
+    DomUtils.write('<div id="SXYH_ImageLibrary"></div></div>');
+    try {
+        const response = await HttpUtils.post(`${PathUtils.APP_PATH()}custom.php?cmd=IMAGE_LIBRARY`);
+        const imageList = JSON.parse(response);
+        const imageElement = DomUtils.getElement("SXYH_ImageLibrary");
+        let html = '';
+        
+        imageList.forEach((image, index) => {
+            const tip = `Title="${index + 1}/${imageList.length} ${image}"`;
+            html += `<a class="SXYH_imageLibrary" target="_blank" href="${PathUtils.getImagePath() + image}" ${tip}><img width="240" border="8" style="border-color:#E5A032;border-style:ridge;" src="${PathUtils.getImagePath() + image}" ${tip}>`;
+            
+            if (showfilename) {
+                html += `<span class="SXYH_imageLibraryFileName"><b>${index + 1}</b> - [ ${image} ]</span>`;
+            }
+            
+            html += `</a>`;
+        });
+        
+        imageElement.innerHTML = html;
+    } catch (error) {
+        console.error('Error parsing image library data:', error);
+    }
 }
 
-function openUrlWithNewWindow(url) {
-    window.open(url);
+// 加载JavaScript功能
+async function SXYH_js(filename) {
+    const v = StringUtils.decodeHtmlEntities(filename.toUpperCase()).replace(/\\/g, "/");
+    
+    if (["RANDOM", "DAY"].includes(v)) {
+        try {
+            const response = await HttpUtils.post(`${PathUtils.APP_PATH()}custom.php?cmd=JS_OF_${filename}`);
+            const script = document.createElement('script');
+            script.src = PathUtils.getJsPath() + response;
+            document.body.appendChild(script);
+            SXYH_JS_CURRENT = response;
+        } catch (error) {
+            console.error('Error loading JavaScript:', error);
+        }
+    } else {
+        const scriptUrl = filename.indexOf('://') === -1 ? PathUtils.getJsPath() + filename : filename;
+        DomUtils.write(`<script src="${scriptUrl}"></script>`);
+        SXYH_JS_CURRENT = scriptUrl;
+    }
 }
 
+// 显示新内容功能
+async function SXYH_new_content() {
+    DomUtils.write('<span id="SXYH_NEW_CONTENT_LIST"> </span>');
+    try {
+        const response = await HttpUtils.post(`${PathUtils.APP_PATH()}custom.php?cmd=NEW`);
+        if (!response) return;
+        const items = response.split('|');
+        let html = '';
+        
+        items.forEach(item => {
+            const [text, link] = item.split(',');
+            if (link) {
+                html += `<li> ${text}, <a href="${link}">${link}</a></li>`;
+            }
+        });
+        
+        const element = DomUtils.getElement("SXYH_NEW_CONTENT_LIST");
+        element.innerHTML = `<ol type="1">${html}</ol>`;
+    } catch (error) {
+        console.error('Error parsing new content data:', error);
+    }
+}
+
+// 打开带查询参数的URL
 function openUrlWithQuery(url, id) {
-
-    // get input value
-    var inputValue = document.getElementById(id).value;
-
-    // input value as query param
-    if (url.indexOf("%1")>-1)
-        queryUrl = url.replace("%1", encodeURI(inputValue));
-    else
-        queryUrl = url + encodeURIComponent(inputValue);
-
-    // open url in new windows/tab
+    const inputValue = document.getElementById(id).value;
+    const queryUrl = url.indexOf("%1") > -1 
+        ? url.replace("%1", encodeURI(inputValue)) 
+        : url + encodeURIComponent(inputValue);
+    
     window.open(queryUrl);
 }
 
+// 在新窗口打开URL
 function openUrlWithNewWindow(url) {
     window.open(url);
 }
 
-// generate daily random numbers for daily quotes
-function randint_day(){
-    D1 = new Date('2000-01-01');
-    D2 = new Date();
-    let n = Math.floor((D2 -D1)/(1000 * 60 * 60 * 24));  // get date difference
-    for(i=0;i<5;i++){            // iteration 5 times
-        n = (31415*(n%0xffff)+(n>>16)+31)%0xfffffff;
-    }
-    return n;
+// 显示图片
+function showimage(img, width) {
+    const fn = PathUtils.DOC_PATH() + img;
+    DomUtils.write(`<a href="${fn}"><img src="${fn}" width="${width}"></a>`);
 }
 
-// show search
-function SXYH_ShowSearch(file='', Title='') {
-    document.write('<div id="SXYH_SEARCH_'+file+'"></div>');
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST", APP_PATH()+"custom.php?cmd=SEARCH&file="+file, true);
-	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState === 4 && xhr.status === 200) {
-			r = xhr.responseText;
-			console.log(r);
-			let SXYH_ArraySearch = JSON.parse(r);
-			div_search = document.getElementById("SXYH_SEARCH_"+file);
-			s = '';
-            if (Title !='')
-                s = s+'<span class="sxyh_search_Title">'+Title+'</span>';
-
-            for (i=0; i<SXYH_ArraySearch.length; i++){
-
-                if(SXYH_ArraySearch[i].length < 1) continue;
-
-                vid = "SearchInput" + i;
-
-                // button
-                v0 = SXYH_ArraySearch[i][0];
-                v1 = v2 = v3 = v4 = "";
-                // button url
-                if(SXYH_ArraySearch[i].length > 1)
-                    v1 = SXYH_ArraySearch[i][1];
-                // button url placeholder
-                if(SXYH_ArraySearch[i].length > 2)
-                    v2 = SXYH_ArraySearch[i][2];
-                // button url placeholder input_style
-                if(SXYH_ArraySearch[i].length > 3)
-                    v3 = SXYH_ArraySearch[i][3];
-                // button url placeholder input_style button_style
-                if(SXYH_ArraySearch[i].length > 4)
-                    v4 = SXYH_ArraySearch[i][4];
-
-                if((v1.indexOf('://') == -1)||(i == 0)) {
-                    search_str = '<div class="sxyh_search_category"><span class="sxyh_search_category" style="'+v4+'">'+SXYH_ArraySearch[i][0]+'</span></div>';
-                }
-                else {
-                    search_str = '<div class="sxyh_search_container"><form onclick="return false"><input class="sxyh_search_input browser-default" style="'+v3+'" type="text" id="'+vid+'" placeholder="'+v2+'"> <button class="sxyh_search_button" style="'+v4+'" onclick="openUrlWithQuery(\''+v1+'\' , \''+ vid+'\')">'+v0+'</button></form></div>';
-                }
-
-                s = s + search_str;
-            }
-			div_search.innerHTML = s;
-		}
-	};
-	xhr.send();
-}
-
-// show navigator
-function SXYH_ShowNav(file='', Title=''){
-    document.write('<div id="SXYH_NAV_'+file+'"></div>');
-    var xhr = new XMLHttpRequest();
-	xhr.open("POST", APP_PATH()+"custom.php?cmd=NAV&file="+file, true);
-	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState === 4 && xhr.status === 200) {
-			r = xhr.responseText;
-			let SXYH_ArrayNav = JSON.parse(r);
-			let div_nav = document.getElementById("SXYH_NAV_"+file);
-			s = '';
-			if (Title != '')
-			    s = s +'<span class="sxyh_nav_Title">'+Title+'</span>';
-			s = s + '<table cellpadding="0" cellspacing="0"><tr class="no-border"><td width="48" class="sxyh_nav_td">';
-			
-			for (i=0; i<SXYH_ArrayNav.length; i++) {
-
-                if(SXYH_ArrayNav[i].length < 1) continue;
-
-                text = SXYH_ArrayNav[i][0];
-                link = '';
-                tip = '';
-                style = '';
-
-                // link
-                if(SXYH_ArrayNav[i].length > 1)
-                    link = SXYH_ArrayNav[i][1];
-                // tip
-                if(SXYH_ArrayNav[i].length > 2)
-                    tip = SXYH_ArrayNav[i][2];
-                // link style
-                if(SXYH_ArrayNav[i].length > 3)
-                    style = SXYH_ArrayNav[i][3];
-
-                if((SXYH_ArrayNav[i].length < 2)||(i == 0)||(link.indexOf('/')==-1)){
-                    if((style=='')&&(tip=='')&&(link!=''))
-                        style=link;
-                    nav_str = '</td></tr><tr class="no-border"><td class="sxyh_nav_td"><span class="sxyh_nav_category"  title="'+tip+'" style="'+style+'">'+text+'</span></td><td class="sxyh_nav_td">';
-                }
-                else{
-                    link = link.replace('{{APP_PATH}}', APP_PATH());
-                    link = link.replace('{{DOC_PATH}}', DOC_PATH());
-                    v = '<a class="sxyh_nav_link" href="'+link+'" onclick="openUrlWithNewWindow(\''+link+'\');return false;" title="'+tip+'" style="'+style+'">'+text+'</a>';
-                    nav_str = '<div class="sxyh_nav_container">'+v+'</div> '
-                }
-
-                s = s + nav_str;
-			}
-			s = s + '</td></tr></table>';
-			div_nav.innerHTML = s;
-		}
-	};
-	xhr.send();
-}
-
-// show Daily Motto
-function SXYH_ShowDailyMotto(style=""){
-document.write('<div class="SXYH_divDiaryMotto" id="SXYH_DAILYMOTTO"></div>');
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST", APP_PATH()+"custom.php?cmd=DAILYMOTTO", true);
-	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState === 4 && xhr.status === 200) {
-			r = xhr.responseText;
-			let SXYH_dm = '';
-			let SXYH_dm_style = '';
-			let SXYH_dm_hint = '';
-			let SXYH_ArrayDm = JSON.parse(r);
-            if (SXYH_ArrayDm.length > 1){
-                d = SXYH_ArrayDm[randint_day()%(SXYH_ArrayDm.length-1)];
-                if (d.length > 0) SXYH_dm = d[0];
-                if (d.length > 1) SXYH_dm_hint = d[1];
-                if (d.length > 2) SXYH_dm_style = d[2];
-            }
-			if(SXYH_dm == ''){
-                SXYH_dm = 'Nothing is impossible';
-                SXYH_dm_hint = '没有什么是不可能的';
-            }
-            if (SXYH_dm_style != '')
-                style = SXYH_dm_style;
-
-            div_dailymotto = document.getElementById("SXYH_DAILYMOTTO");
-			div_dailymotto.innerHTML = '<span class="SXYH_DiaryMotto" style="'+style+'" TITLE="'+SXYH_dm_hint+'">'+SXYH_dm+'</span>';
-		}
-	};
-	xhr.send();
-}
-
-function decodeHtmlEntities(encodedString) {
-    const textArea = document.createElement('textarea');
-    textArea.innerHTML = encodedString;
-    return textArea.value;
-}
-
-// last wallpaper filename
-var SXYH_WALLPAPER_CURRENT='';
-// set current page's walpaper
-// img = xx/xx/xx.png | xx.jpg | RANDOM or "" | DAY | BING | BING_AUTOSAVE
-//       xx/xx/xx.png or https://xxx.jpg: Specify image file with directory or url
-//       xx.jpg: image file in current directory
-//       {{IMG_LIB}}xx.jpg: image file in image library
-//       RANDOM: random image file in homepage/config/images/ directory every view
-//       DAY: random image file in homepage/config/images/ directory per day
-//       BING: get today's bing wallpaper
-//       BING_AUTOSAVE: get today's bing wallpaper and save to image library
-// opacity: 0 - 1
-// size: image size, it is CSS background-size Property  
-function SXYH_setwallpaper(img="", opacity=0.8, size="cover") {
-
-    // replace "\" with "/" and convert to uppercase
-    let v = decodeHtmlEntities(img).replace(/\\/g, "/");
-
-    switch (Math.floor(opacity*10)) {
-        case 9:ofile = 'opacity_90.png';break;
-        case 8:ofile = 'opacity_80.png';break;
-        case 7:ofile = 'opacity_70.png';break;
-        case 6:ofile = 'opacity_60.png';break;
-        case 5:ofile = 'opacity_50.png';break;
-        case 4:ofile = 'opacity_40.png';break;
-        case 3:ofile = 'opacity_30.png';break;
-        case 2:ofile = 'opacity_20.png';break;
-        case 1:ofile = 'opacity_10.png';break;
-        case 0:ofile = '';break;
-        default:return;
-    }
-    if(ofile != '') ofile = 'url('+APP_PATH()+'scripts/'+ofile+'),';
-
-    imgfile = "";
-    if(v == "") v = "RANDOM";
-    if((v == "RANDOM")||(v == "DAY")||(v == "BING")||(v == "BING_AUTOSAVE")) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", APP_PATH()+"custom.php?cmd=IMAGE_OF_"+v, true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                r = xhr.responseText;
-                if(r.indexOf('://')==-1)
-                    r = IMAGE_PATH()+r;
-                document.body.style.background = ofile + 'url(' + r + ') no-repeat fixed center';
-                document.body.style.backgroundSize = size;
-                SXYH_WALLPAPER_CURRENT = xhr.responseText;
-            }
-        };
-        xhr.send();
-    }
-    else {
-        if (v.substr(0, '{{IMG_LIB}}'.length) == '{{IMG_LIB}}') {
-            imgfile = IMAGE_PATH()+v.substr('{{IMG_LIB}}'.length);
+// 更新文件计数
+async function update_filecount() {
+    if (window.SXYH_FLAG_UPDATE_FILECOUNT) {
+        window.SXYH_FLAG_UPDATE_FILECOUNT = 0;
+        try {
+            await HttpUtils.post(`${PathUtils.APP_PATH()}updatefilecount.php?cmd=update`);
+        } catch (error) {
+            console.error('Error updating file count:', error);
         }
-        else{        
-            // include "/" or "://"
-            if (v.indexOf("/") > -1){
-                imgfile = v;
-            }
-            else{
-                imgfile = DOC_PATH() + v;
-            }
-        }
-        document.body.style.background = ofile + 'url(' + imgfile + ') no-repeat fixed center';
-        document.body.style.backgroundSize = size;
-        SXYH_WALLPAPER_CURRENT = imgfile;
     }
 }
 
-// show all image library
-function SXYH_ShowImageLibrary(Title='', showfilename=true) {
-
-    document.write('<div');
-    if (Title != '')
-        document.write('<span class="sxyh_nav_Title">'+Title+'</span>');
-    document.write('<div id="SXYH_ImageLibrary">');
-    document.write('</div></div>');
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", APP_PATH()+"custom.php?cmd=IMAGE_LIBRARY", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            imglist = JSON.parse(xhr.responseText);
-            var divElement = document.getElementById("SXYH_ImageLibrary");
-            let n = 0;
-            let img = '';
-            for ( i=0; i < imglist.length; i++) {
-                tip = 'Title="'+(i+1)+'/'+imglist.length+' '+imglist[i]+'"';
-                img = img + '<a class="SXYH_imageLibrary" target="_blank" href="'+IMAGE_PATH()+imglist[i]+'" '+tip+'><img width="240" border="8" style="border-color:#E5A032;border-style:ridge;" src="'+IMAGE_PATH()+imglist[i]+'" '+tip+'>';
-                if(showfilename)
-                    img = img + '<span class="SXYH_imageLibraryFileName"><b>'+(i+1)+'</b> - [ '+imglist[i]+' ]</span>';
-
-                img = img + '</a>';
-            }
-            divElement.innerHTML = img;
-        }
-    };
-    xhr.send();
-}
-
-// use javascript
-// filename = https://xx.js | xx.js | RANDOM | DAY
-//            https://xx.js: Specify js file with url
-//            xx.js: "js file in homepage/config/javascript/" directory
-//            RANDOM: random js file in "homepage/config/javascript/" directory every view
-//            DAY: random image file in "homepage/config/javascript/" directory per day
-var SXYH_JS_CURRENT='';
-function SXYH_js(filename) {
-
-    // replace "\" with "/" and convert to uppercase
-    let v = decodeHtmlEntities(filename.toUpperCase()).replace(/\\/g, "/");
-
-    if ((filename == "RANDOM")||(filename == "DAY")) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", APP_PATH()+"custom.php?cmd=JS_OF_"+filename, true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var script = document.createElement('script');
-                script.src = JS_PATH()+xhr.responseText;
-                document.body.appendChild(script);
-                SXYH_JS_CURRENT = xhr.responseText;
-            }
-        };
-        xhr.send();
-    }
-    else {
-        if(filename.indexOf('://')==-1)
-            filename = JS_PATH()+filename;
-        document.write('<script src="'+filename+'"></script>');
-        SXYH_JS_CURRENT = filename;
-    }
-}
-
-// update file count when SXYH_FLAG_UPDATE_FILECOUNT = 1, by send query
-function update_filecount(){
-    if(SXYH_FLAG_UPDATE_FILECOUNT){
-        SXYH_FLAG_UPDATE_FILECOUNT = 0;  // clear flag
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", APP_PATH()+"updatefilecount.php?cmd=update", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.send();
-    }
-}
-
-update_filecount();
-
-
-function SXYH_new_content() {
-    document.write('<span id="SXYH_NEW_CONTENT_LIST"> </span>');
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", APP_PATH()+"custom.php?cmd=NEW", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            r = xhr.responseText;
-            if (r == '')
-                return;
-            d = r.split('|');
-            r = '';
-            for(i = 0; i < d.length; i++){
-                a = d[i].split(',');
-                if(a.length > 1)
-                    r += '<li> '+a[0]+', <a href='+a[1]+'>'+a[1]+'</a></li>';
-            }
-            e = document.getElementById("SXYH_NEW_CONTENT_LIST");
-            e.innerHTML = '<ol type="1">'+r+'</ol>';
-        }
-    };
-    xhr.send();
-}
+// 初始化调用
+update_filecount();    
