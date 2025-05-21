@@ -12,7 +12,7 @@
 - 新闻||网站|color:blue
     - 环球网| https://www.huanqiu.com/
     - 观察者网| https://www.guancha.cn/
-    - 联合早报| http://www.quzaobao.com/
+    - 联合早报| http://www.zaobao.com/
     - 央视新闻| https://news.cctv.com/china/
     - 澎湃新闻| https://www.thepaper.cn/
     - 百度新闻| https://news.baidu.com/
@@ -146,7 +146,10 @@
     - 360AI| https://www.sou.com
     - AIGC导航|https://www.aigc.cn/
     - mistral|https://chat.mistral.ai/chat
-    - 豆包|https://doubao.com     
+    - 豆包|https://doubao.com
+    - nocode | https://nocode.cn/
+    - deepseek|https://chat.deepseek.com/
+    - openrouter|https://openrouter.ai/
 - 综合|||color:black;
     - 12306| https://www.12306.cn/
     - 百度翻译| https://fanyi.baidu.com/
