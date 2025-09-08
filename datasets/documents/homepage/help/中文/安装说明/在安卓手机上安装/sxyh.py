@@ -1,5 +1,5 @@
 import subprocess
-import sys
+import sys, os
 
 HTTPD_CONF = "/data/data/com.termux/files/usr/etc/apache2/httpd.conf"
 
@@ -146,6 +146,15 @@ def config_httpd():
         print(f"配置 apache2 失败: {e}")
         sys.exit(3)
 
+def get_ip(link='wlan0'):
+    r = os.popen('ifconfig').readlines()
+    index = lines_find_from_index(r, link+': ')
+    if index != None:
+        index = lines_find_from_index(r, '        inet ', index+1)
+        if index != None:
+            return r[index].split()[1]
+    return None
+
 print("\n")
 print("+-------------------------------+")
 print("| 即将安装随心远航系统到 termux |")
@@ -157,26 +166,36 @@ print("\n请按回车键继续运行\n")
 input()
 
 print("1. 安装 apache2、php 和 php-apache\n")
-run_external_command("apt-get install apache2 -y php php-apache")
-
+run_external_command("apt-get install -y apache2 php php-apache")
 
 print("2. 配置 apache2\n")
 config_httpd()
 
-print("3. 启动 apache2 服务\n")
+print("3. 安装随心远航系统\n")
+
+if os.path.isdir(HTTPD_ROOT+'/nav2'):
+    print(f"  目录 {HTTPD_ROOT}'/nav2' 已存在，跳过文件下载步骤\n")
+else:
+    print("  从 gitee 下载随心远航系统\n")
+    run_external_command("wget -O $HOME/nav2.zip https://gitee.com/shaoziyang/webnav2/repository/archive/main.zip")
+    print(f"  解压缩下载的文件到 {HTTPD_ROOT}\n")
+    run_external_command(f"unzip $HOME/nav2.zip webnav2-main/* -d {HTTPD_ROOT}")
+    print(f"  目录改名为 {HTTPD_ROOT}/nav2")
+    run_external_command(f"mv {HTTPD_ROOT}/webnav2-main {HTTPD_ROOT}/nav2")
+
+print("4. 启动 apache2 服务\n")
 run_external_command("sv-enable httpd")
-run_external_command("sv restart httpd")
-
-print("4. 安装随心远航系统\n")
-print("  从 gitee 下载随心远航系统\n")
-run_external_command("wget -O $HOME/nav2.zip https://gitee.com/shaoziyang/webnav2/repository/archive/main.zip")
-print(f"  解压缩下载的文件到 {HTTPD_ROOT}\n")
-run_external_command(f"unzip $HOME/nav2.zip webnav2-main/* -d {HTTPD_ROOT}")
-print(f"  目录改名为 {HTTPD_ROOT}/nav2")
-run_external_command(f"mv {HTTPD_ROOT}/webnav2-main {HTTPD_ROOT}/nav2")
-
+run_external_command("sv down httpd")
+run_external_command("sv up httpd")
 
 print("\n随心远航系统已经成功安装")
 print("\n========================")
 
-print("\n请打开浏览器，输入手机的ip地址和端口号（如 http://192.168.1.100:8100/nav2），进行参数设置。推荐先安装 tailscale 并登录，就可以使用设备名加端口号访问，而不用担心 ip 地址的变化了。")
+ip = get_ip()
+
+if ip:
+    url = f"http://{ip}:{HTTPD_PORT}/nav2"
+else:
+    url = f"如 http://192.168.1.100:8100/nav2"
+
+print(f"\n请打开浏览器，输入手机的ip地址和端口号（{url}），进行参数设置。推荐先安装 tailscale 并登录，就可以使用设备名加端口号访问，而不用担心 ip 地址的变化了。")
