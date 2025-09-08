@@ -1,5 +1,5 @@
 import subprocess
-import sys, os
+import sys, os, time
 
 HTTPD_CONF = "/data/data/com.termux/files/usr/etc/apache2/httpd.conf"
 
@@ -185,7 +185,9 @@ else:
 
 print("4. 启动 apache2 服务\n")
 run_external_command("sv-enable httpd")
+time.sleep(2)
 run_external_command("sv down httpd")
+time.sleep(2)
 run_external_command("sv up httpd")
 
 print("\n随心远航系统已经成功安装")
